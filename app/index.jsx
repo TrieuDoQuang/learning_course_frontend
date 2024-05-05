@@ -1,14 +1,33 @@
 import { StatusBar } from "expo-status-bar";
-import { StyleSheet, Text, View } from "react-native";
-import { Link } from "expo-router";
+import {
+  StyleSheet,
+  Text,
+  Touchable,
+  TouchableOpacity,
+  View,
+} from "react-native";
+import { Redirect, router } from "expo-router";
 
 export default function App() {
   return (
     <View className="flex-1 items-center justify-center bg-white">
       <Text className="text-3xl">Test app</Text>
-      <Link href="/Home" className="text-blue-500">
-        Go to Home
-      </Link>
+      <TouchableOpacity
+        onPress={() => {
+          router.push("/SignIn");
+        }}
+        className="bg-blue-500 p-2 rounded-md"
+      >
+        <Text className="text-white">Sign in</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => {
+          router.push("/SignUp");
+        }}
+        className="bg-blue-500 p-2 rounded-md"
+      >
+        <Text className="text-white">Sign Up</Text>
+      </TouchableOpacity>
     </View>
   );
 }
