@@ -11,6 +11,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
+import DateTimePicker from "@react-native-community/datetimepicker";
 
 const SignUp = () => {
   const [user, setUser] = useState({
@@ -22,6 +23,13 @@ const SignUp = () => {
     password: "",
     pin: "",
   });
+  const [showDatePicker, setShowDatePicker] = useState(false);
+  const handleSelectDate = (event, selectedDate) => {
+    setShowDatePicker(false);
+    if (selectedDate) {
+      handleChange("dob", selectedDate);
+    }
+  };
   console.log(user);
   const handleChange = (name, value) => {
     setUser((prev) => ({ ...prev, [name]: value }));
@@ -31,7 +39,7 @@ const SignUp = () => {
     <SafeAreaView className="h-full">
       <ScrollView>
         <View className="p-5">
-          <View className="bg-gradient-to-r from-blue-500 to-blue-400 h-14"></View>
+          <View className="bg-gradient-to-r from-blue-1 to-blue-2 h-9"></View>
           <Text className="text-center font-bold text-[36px]">Sign up</Text>
           <View className="flex gap-3">
             <View>
@@ -79,15 +87,24 @@ const SignUp = () => {
               />
             </View>
             <View>
+              {showDatePicker && (
+                <DateTimePicker
+                  mode="date"
+                  value={user.dob}
+                  onChange={handleSelectDate}
+                />
+              )}
               <Text>Date of Birth</Text>
-              <TextInput
-                value={user.dob}
-                onChangeText={(value) => {
-                  handleChange("dob", new Date(value));
-                }}
-                placeholder="22/12/1999"
-                className=" h-[53px] p-2 border-2 border-gray-300 rounded-2xl focus:outline-none focus:border-blue-400"
-              />
+              <TouchableOpacity
+                onPress={() => setShowDatePicker(true)}
+                className="justify-center h-[53px] p-2 border-2 border-gray-300 rounded-2xl focus:outline-none focus:border-blue-400"
+              >
+                <Text>
+                  {user.dob instanceof Date
+                    ? user.dob.toISOString().split("T")[0]
+                    : ""}
+                </Text>
+              </TouchableOpacity>
             </View>
             <View>
               <Text>Password</Text>

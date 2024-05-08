@@ -3,12 +3,12 @@ module.exports = {
   content: ["./app/**/*.{js,jsx,ts,tsx}", "./component/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
-      // backgroundImage: {
-      //   gradient: "linear-gradient(to right, #00014F, #3A6073)",
-      // },
+      backgroundImage: {
+        gradient: "linear-gradient(to right, #00014F, #3A6073)",
+      },
       colors: {
-        "blue-500": "#00014F",
-        "blue-400": "#3A6073",
+        "blue-1": "#00014F",
+        "blue-2": "#3A6073",
         primary: "#161622",
         secondary: {
           DEFAULT: "#FF9C01",
