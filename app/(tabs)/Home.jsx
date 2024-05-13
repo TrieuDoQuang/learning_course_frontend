@@ -5,8 +5,10 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
+import { Redirect, router, Link } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { TransactionItem } from "../components";
 import {
   faUser,
   faGreaterThan,
@@ -115,20 +117,7 @@ const Home = () => {
               </TouchableOpacity>
             </View>
           </View>
-          <View className="justify-center items-center">
-            <View className="h-[78px] w-[330px]  bg-white rounded-lg my-[5px]">
-              <View className="p-3 flex-row  justify-between  items-center">
-                <FontAwesomeIcon icon={faUser} size={40} color="orange" />
-                <View>
-                  <Text className="font-bold">Transfer to</Text>
-                  <Text>Amira Leswana</Text>
-                  <Text className="text-gray-400">7 March 2022</Text>
-                </View>
-                <Text className="text-lg font-bold">150.000 VND</Text>
-              </View>
-            </View>
-            <View className="h-[78px] w-[330px] bg-white rounded-lg my-[5px]"></View>
-          </View>
+          <TransactionItem />
         </View>
       </ScrollView>
     </SafeAreaView>

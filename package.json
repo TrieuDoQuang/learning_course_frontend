@@ -16,6 +16,7 @@
     "@react-native-community/datetimepicker": "^8.0.0",
     "@react-native-community/masked-view": "^0.1.11",
     "@react-navigation/native": "^6.1.17",
+    "@react-navigation/native-stack": "^6.9.26",
     "axios": "^1.6.8",
     "expo": "~50.0.14",
     "expo-constants": "~15.4.6",
