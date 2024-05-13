@@ -5,10 +5,9 @@ import {
   TextInput,
   TouchableOpacity,
 } from "react-native";
-import { Redirect, router, Link } from "expo-router";
+import { Link } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { TransactionItem } from "../components";
 import {
   faUser,
   faGreaterThan,
@@ -35,9 +34,15 @@ const Home = () => {
                   <Text className="text-white font-bold text-[17px]">
                     Chau Hoang Gia Dat
                   </Text>
-                  <TouchableOpacity className="flex flex-row items-center">
-                    <Text className="mr-2 text-gray-500">Payment Account</Text>
-                    <FontAwesomeIcon icon={faGreaterThan} color="gray" />
+                  <TouchableOpacity>
+                    <Link href="Home/Payment">
+                      <View className="items-center flex flex-row">
+                        <Text className="mr-2 text-gray-500">
+                          Payment Account
+                        </Text>
+                        <FontAwesomeIcon icon={faGreaterThan} color="gray" />
+                      </View>
+                    </Link>
                   </TouchableOpacity>
                 </View>
               </View>
@@ -48,38 +53,46 @@ const Home = () => {
               <View className="flex-row justify-between items-center mt-8">
                 <View className="items-center gap-1">
                   <TouchableOpacity className="h-[40px] w-[40px] bg-white items-center justify-center rounded-sm">
-                    <FontAwesomeIcon
-                      icon={faMoneyBillTransfer}
-                      size={25}
-                      color="#3BBDFE"
-                    />
+                    <Link href="/Home/Transfer">
+                      <FontAwesomeIcon
+                        icon={faMoneyBillTransfer}
+                        size={25}
+                        color="#3BBDFE"
+                      />
+                    </Link>
                   </TouchableOpacity>
                   <Text className="text-center text-white">Transfer</Text>
                 </View>
                 <View className="items-center gap-1">
                   <TouchableOpacity className="h-[40px] w-[40px] bg-white items-center justify-center rounded-sm">
-                    <FontAwesomeIcon
-                      icon={faFileArrowUp}
-                      size={25}
-                      color="#3BBDFE"
-                    />
+                    <Link href="Home/Withdraw">
+                      <FontAwesomeIcon
+                        icon={faFileArrowUp}
+                        size={25}
+                        color="#3BBDFE"
+                      />
+                    </Link>
                   </TouchableOpacity>
                   <Text className="text-center text-white">Withdraw</Text>
                 </View>
                 <View className="items-center gap-1">
                   <TouchableOpacity className="h-[40px] w-[40px] bg-white items-center justify-center rounded-sm">
-                    <FontAwesomeIcon
-                      icon={faWallet}
-                      size={25}
-                      color="#3BBDFE"
-                    />
+                    <Link href="Home/TopUp">
+                      <FontAwesomeIcon
+                        icon={faWallet}
+                        size={25}
+                        color="#3BBDFE"
+                      />
+                    </Link>
                   </TouchableOpacity>
                   <Text className="text-center text-white">Top Up</Text>
                 </View>
                 <View className="items-center gap-1 mr-1">
+                  {/* <Link href="Home/More"> */}
                   <TouchableOpacity className="h-[40px] w-[40px] bg-white items-center justify-center rounded-sm">
                     <FontAwesomeIcon icon={faBars} size={25} color="#3BBDFE" />
                   </TouchableOpacity>
+                  {/* </Link> */}
                   <Text className="text-center text-white">More</Text>
                 </View>
               </View>
@@ -117,7 +130,6 @@ const Home = () => {
               </TouchableOpacity>
             </View>
           </View>
-          <TransactionItem />
         </View>
       </ScrollView>
     </SafeAreaView>

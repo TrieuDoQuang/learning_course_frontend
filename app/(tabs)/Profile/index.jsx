@@ -12,6 +12,7 @@ import {
   faGreaterThan,
 } from "@fortawesome/free-solid-svg-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { Link } from "expo-router";
 
 const Profile = () => {
   return (
@@ -59,9 +60,13 @@ const Profile = () => {
           </View>
           <View className="p-[9px]">
             <View className="w-full bg-white rounded-lg h-[56px] flex justify-center mb-2">
-              <TouchableOpacity className="flex flex-row items-center justify-between p-4">
-                <Text>Account</Text>
-                <FontAwesomeIcon icon={faGreaterThan} color="blue" />
+              <TouchableOpacity>
+                <Link href="Profile/Account">
+                  <View className="flex flex-row items-center justify-between p-4">
+                    <Text>Account</Text>
+                    <FontAwesomeIcon icon={faGreaterThan} color="blue" />
+                  </View>
+                </Link>
               </TouchableOpacity>
             </View>
             <View className="w-full bg-white rounded-lg h-[56px] flex justify-center mb-2">

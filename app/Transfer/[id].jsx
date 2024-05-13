@@ -9,7 +9,6 @@ import {
 import { useState } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faUser, faChevronDown } from "@fortawesome/free-solid-svg-icons";
-
 const Transfer = () => {
   return (
     <SafeAreaView className="bg-gray-200 h-full">

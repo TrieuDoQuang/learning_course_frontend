@@ -27,6 +27,7 @@ const TabLayouts = () => {
             ),
           }}
         />
+
         <Tabs.Screen
           name="QR"
           options={{
@@ -42,6 +43,7 @@ const TabLayouts = () => {
             ),
           }}
         />
+
         <Tabs.Screen
           name="Notification"
           options={{
@@ -57,6 +59,7 @@ const TabLayouts = () => {
             ),
           }}
         />
+
         <Tabs.Screen
           name="Profile"
           options={{
