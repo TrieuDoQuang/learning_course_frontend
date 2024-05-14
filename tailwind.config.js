@@ -21,8 +21,14 @@ module.exports = {
           100: "#1E1E2D",
           200: "#232533",
         },
+        white: {
+          DEFAULT: "ffffff",
+        },
         gray: {
           100: "#CDCDE0",
+        },
+        information: {
+          DEFAULT: "#405AB5",
         },
       },
       fontFamily: {
