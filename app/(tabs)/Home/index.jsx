@@ -3,6 +3,7 @@ import {
   Text,
   ScrollView,
   TextInput,
+  Image,
   TouchableOpacity,
 } from "react-native";
 import { Link } from "expo-router";
@@ -22,6 +23,9 @@ const Home = () => {
   const [selectedButton, setSelectedButton] = useState("All");
 
   const buttons = ["All", "Transfer", "Withdraw", "Top up", "More"];
+
+  const profilePic = require("../../assets/Default_pfp.png");
+
   return (
     <SafeAreaView className="h-full bg-gray-200">
       <ScrollView>
@@ -128,6 +132,45 @@ const Home = () => {
               <TouchableOpacity>
                 <Text className="text-blue-500 ">See all</Text>
               </TouchableOpacity>
+            </View>
+            <View className="w-[330px] h-[60px] flex flex-row justify-between bg-white my-2">
+              <View className="flex flex-column justify-center ml-2">
+                <Image className={"w-[45px] h-[45px]"} source={profilePic} />
+              </View>
+              <View className="flex flex-column justify-between w-[120px]">
+                <Text className="text-xs font-bold">Transfer to</Text>
+                <Text className="text-xs max-h-[20px]">Do Quan Trieu</Text>
+                <Text className="text-xs font-light">14 May 2024</Text>
+              </View>
+              <View className="flex flex-column justify-center mr-2 w-[100px]">
+                <Text className="font-bold">200.000 VND</Text>
+              </View>
+            </View>
+            <View className="w-[330px] h-[60px] flex flex-row justify-between bg-white my-2">
+              <View className="flex flex-column justify-center ml-2">
+                <Image className={"w-[45px] h-[45px]"} source={profilePic} />
+              </View>
+              <View className="flex flex-column justify-between w-[120px]">
+                <Text className="text-xs font-bold">Transfer to</Text>
+                <Text className="text-xs max-h-[20px]">Duong Duc Khai aaaaaaaaaaaaaaaaaaaaaaaaaaaa</Text>
+                <Text className="text-xs font-light">13 May 2024</Text>
+              </View>
+              <View className="flex flex-column justify-center mr-2 w-[100px]">
+                <Text className="font-bold">150.000 VND</Text>
+              </View>
+            </View>
+            <View className="w-[330px] h-[60px] flex flex-row justify-between bg-white my-2">
+              <View className="flex flex-column justify-center ml-2">
+                <Image className={"w-[45px] h-[45px]"} source={profilePic} />
+              </View>
+              <View className="flex flex-column justify-between w-[120px]">
+                <Text className="text-xs font-bold">Transfer from</Text>
+                <Text className="text-xs max-h-[20px]">Tran </Text>
+                <Text className="text-xs font-light">11 May 2024</Text>
+              </View>
+              <View className="flex flex-column justify-center mr-2 w-[100px]">
+                <Text className="font-bold">100.000.000 VND</Text>
+              </View>
             </View>
           </View>
         </View>
