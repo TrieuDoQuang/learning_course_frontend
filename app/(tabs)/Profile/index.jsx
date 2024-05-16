@@ -9,7 +9,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
   faSimCard,
   faCopy,
-  faGreaterThan,
+  faAngleRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link } from "expo-router";
@@ -64,7 +64,7 @@ const Profile = () => {
                 <Link href="Profile/Account">
                   <View className="flex flex-row items-center justify-between p-4">
                     <Text>Account</Text>
-                    <FontAwesomeIcon icon={faGreaterThan} color="blue" />
+                    <FontAwesomeIcon icon={faAngleRight} color="blue" />
                   </View>
                 </Link>
               </TouchableOpacity>
@@ -72,31 +72,31 @@ const Profile = () => {
             <View className="w-full bg-white rounded-lg h-[56px] flex justify-center mb-2">
               <TouchableOpacity className="flex flex-row items-center justify-between p-4">
                 <Text>Debit Card Setting</Text>
-                <FontAwesomeIcon icon={faGreaterThan} color="blue" />
+                <FontAwesomeIcon icon={faAngleRight} color="blue" />
               </TouchableOpacity>
             </View>
             <View className="w-full bg-white rounded-lg h-[56px] flex justify-center mb-2">
               <TouchableOpacity className="flex flex-row items-center justify-between p-4">
                 <Text>Security</Text>
-                <FontAwesomeIcon icon={faGreaterThan} color="blue" />
+                <FontAwesomeIcon icon={faAngleRight} color="blue" />
               </TouchableOpacity>
             </View>
             <View className="w-full bg-white rounded-lg h-[56px] flex justify-center mb-2">
               <TouchableOpacity className="flex flex-row items-center justify-between p-4">
                 <Text>Language</Text>
-                <FontAwesomeIcon icon={faGreaterThan} color="blue" />
+                <FontAwesomeIcon icon={faAngleRight} color="blue" />
               </TouchableOpacity>
             </View>
             <View className="w-full bg-white rounded-lg h-[56px] flex justify-center mb-2">
               <TouchableOpacity className="flex flex-row items-center justify-between p-4">
                 <Text>FAQ</Text>
-                <FontAwesomeIcon icon={faGreaterThan} color="blue" />
+                <FontAwesomeIcon icon={faAngleRight} color="blue" />
               </TouchableOpacity>
             </View>
             <View className="w-full bg-white rounded-lg h-[56px] flex justify-center mb-2">
               <TouchableOpacity className="flex flex-row items-center justify-between p-4">
                 <Text>Help Center</Text>
-                <FontAwesomeIcon icon={faGreaterThan} color="blue" />
+                <FontAwesomeIcon icon={faAngleRight} color="blue" />
               </TouchableOpacity>
             </View>
             <TouchableOpacity className="w-[315px] bg-white mx-[15px] rounded-lg h-[40px] flex justify-center mb-2 border-red-600 border items-center">
