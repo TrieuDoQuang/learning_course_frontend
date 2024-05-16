@@ -4,9 +4,13 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
   faHome,
   faQrcode,
+  faMoneyBillTransfer,
   faBell,
   faUserAlt,
 } from "@fortawesome/free-solid-svg-icons";
+
+
+
 
 const TabLayouts = () => {
   return (
@@ -17,7 +21,7 @@ const TabLayouts = () => {
           options={{
             headerShown: false,
             tabBarIcon: ({ focused }) => (
-              <View style={{ alignItems: "center" }}>
+              <View className="items-center">
                 <FontAwesomeIcon
                   icon={faHome}
                   size={20}
@@ -33,9 +37,25 @@ const TabLayouts = () => {
           options={{
             headerShown: false,
             tabBarIcon: ({ focused }) => (
-              <View style={{ alignItems: "center" }}>
+              <View className="items-center">
                 <FontAwesomeIcon
                   icon={faQrcode}
+                  size={20}
+                  color={focused ? "#3BBDFE" : "gray"}
+                />
+              </View>
+            ),
+          }}
+        />
+
+        <Tabs.Screen
+          name="Transfer"
+          options={{
+            headerShown: false,
+            tabBarIcon: ({ focused }) => (
+              <View className="items-center">
+                <FontAwesomeIcon
+                  icon={faMoneyBillTransfer}
                   size={20}
                   color={focused ? "#3BBDFE" : "gray"}
                 />
@@ -49,7 +69,7 @@ const TabLayouts = () => {
           options={{
             headerShown: false,
             tabBarIcon: ({ focused }) => (
-              <View style={{ alignItems: "center" }}>
+              <View className="items-center">
                 <FontAwesomeIcon
                   icon={faBell}
                   size={20}
@@ -65,7 +85,7 @@ const TabLayouts = () => {
           options={{
             headerShown: false,
             tabBarIcon: ({ focused }) => (
-              <View style={{ alignItems: "center" }}>
+              <View className="items-center">
                 <FontAwesomeIcon
                   icon={faUserAlt}
                   size={20}

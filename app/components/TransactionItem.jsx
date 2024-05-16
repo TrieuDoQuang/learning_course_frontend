@@ -1,22 +1,23 @@
-import { View, Text } from "react-native";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faUser } from "@fortawesome/free-solid-svg-icons";
-const TransactionItem = () => {
-  <View>
-    <View className="justify-center items-center">
-      <View className="h-[78px] w-[330px]  bg-white rounded-lg my-[5px]">
-        <View className="p-3 flex-row  justify-between  items-center">
-          <FontAwesomeIcon icon={faUser} size={40} color="orange" />
-          <View>
-            <Text className="font-bold">Transfer to</Text>
-            <Text>Amira Leswana</Text>
-            <Text className="text-gray-400">7 March 2022</Text>
-          </View>
-          <Text className="text-lg font-bold">150.000 VND</Text>
+import { View, Text, Image } from "react-native";
+
+const TransactionItem = ({ image, name, date, amount }) => {
+  return (
+    <View className="w-full rounded-md h-[60px] flex flex-row bg-slate-50 py-1 px-2 my-2">
+      <View className="flex flex-column justify-center mr-4">
+        <Image className={"w-[45px] h-[45px]"} source={image} />
+      </View>
+      <View className="flex flex-row justify-between w-full">
+        <View className="flex flex-col justify-between">
+          <Text className="text-xs font-bold">Transfer to</Text>
+          <Text className="text-xs max-h-[20px]">{name}</Text>
+          <Text className="text-xs font-light">{date}</Text>
+        </View>
+        <View className="flex flex-col justify-center mr-1">
+          <Text className="font-bold">{amount} VND</Text>
         </View>
       </View>
     </View>
-  </View>;
+  );
 };
 
 export default TransactionItem;
