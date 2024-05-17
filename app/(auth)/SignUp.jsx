@@ -130,7 +130,7 @@ const SignUp = () => {
               />
             </View>
             <TouchableOpacity className="bg-black p-2 flex flex-row rounded-xl h-[53px] items-center  justify-center">
-              <Text className="text-white text-center font-bold pr-2">
+              <Text className="text-slate-50 text-center font-bold pr-2">
                 Create new account
               </Text>
               <FontAwesomeIcon
