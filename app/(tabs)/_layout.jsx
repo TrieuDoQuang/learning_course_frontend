@@ -1,14 +1,11 @@
-import { View, Text, ImageBackground } from "react-native";
-import { Tabs, Redirect } from "expo-router";
+import { View, ImageBackground } from "react-native";
+import { Tabs } from "expo-router";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
   faHome,
   faQrcode,
-  faMoneyBillTransfer,
   faBell,
   faUserAlt,
-  faShuffle,
-  faArrowAltCircleDown,
   faArrowRightArrowLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import images from "../assets";
@@ -22,7 +19,6 @@ const TabLayouts = () => {
             backgroundColor: "#1D1D25",
             borderTopLeftRadius: 15,
             borderTopRightRadius: 15,
-            marginRight: 5,
           },
           tabBarInactiveTintColor: "gray",
           tabBarActiveTintColor: "#3BBDFE",
@@ -61,6 +57,7 @@ const TabLayouts = () => {
             ),
           }}
         />
+        
 
         <Tabs.Screen
           name="Transfer"
@@ -72,7 +69,10 @@ const TabLayouts = () => {
                 source={images.curved}
                 className="pl-[17.5px] pr-[15.5px] pt-[10px] items-center absolute top-[-25px]"
               >
-                <ImageBackground source={images.transferbg} className="items-center bg-[#3BBDFE] p-[14px] rounded-[999px]">
+                <ImageBackground
+                  source={images.transferbg}
+                  className="items-center bg-[#3BBDFE] p-[14px] rounded-[999px]"
+                >
                   <FontAwesomeIcon
                     icon={faArrowRightArrowLeft}
                     size={23}

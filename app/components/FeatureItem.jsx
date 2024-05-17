@@ -13,7 +13,7 @@ const FeatureItem = ({ title, icon }) => {
         <TouchableOpacity className="h-[40px] w-[40px] bg-white items-center justify-center rounded-sm">
           <Link
             className
-            href={title === "Transfer" ? "/Transfer" : `/Home/${title}`}
+            href={title === "Transfer" ? "/Transfer" : `/Home/${title}/`}
           >
             <FontAwesomeIcon icon={icon} size={25} color="#2B2DE2" />
           </Link>

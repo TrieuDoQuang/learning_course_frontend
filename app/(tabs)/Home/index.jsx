@@ -18,6 +18,7 @@ import {
   faFileArrowUp,
   faWallet,
   faBars,
+  faGift,
 } from "@fortawesome/free-solid-svg-icons";
 import images from "../../assets";
 import { FeatureItem, TransactionItem } from "../../components";
@@ -41,7 +42,7 @@ const Home = () => {
                     Chau Hoang Gia Dat
                   </Text>
                   <TouchableOpacity>
-                    <Link href="Home/Payment">
+                    <Link href="Home/PaymentAccount">
                       <View className="items-center flex flex-row">
                         <Text className="mr-2 text-gray-400 text-md">
                           Payment Account
@@ -60,7 +61,7 @@ const Home = () => {
                 <FeatureItem title="Transfer" icon={faMoneyBillTransfer} />
                 <FeatureItem title="Withdraw" icon={faFileArrowUp} />
                 <FeatureItem title="Top Up" icon={faWallet} />
-                <FeatureItem title="More" icon={faBars} />
+                <FeatureItem title="Rewards" icon={faGift} />
               </View>
             </View>
           </ImageBackground>

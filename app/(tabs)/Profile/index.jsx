@@ -4,7 +4,7 @@ import {
   ScrollView,
   TextInput,
   TouchableOpacity,
-  ImageBackground
+  ImageBackground,
 } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
@@ -15,19 +15,20 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link } from "expo-router";
 import images from "../../assets";
+import { ProfileItem } from "../../components";
 
 const Profile = () => {
   return (
     <SafeAreaView className="h-full bg-gray-200">
       <ScrollView>
-        <View>
-          <View className="p-[9px]">
+        <View className="mb-10">
+          <View className="">
             <View className=" border-1 bg-white shadow-lg w-full h-[285px] flex justify-center items-center  ">
               <Text className="text-center pb-4 text-[20px] font-bold ">
                 Profile
               </Text>
-              <ImageBackground source={images.background}>
-                <View className="w-[315px] h-[180px] rounded-lg">
+              <ImageBackground source={images.background} borderRadius={10}>
+                <View className="w-[315px] h-[180px] rounded-md">
                   <View className="p-6 flex gap-3">
                     <View className="flex flex-row justify-between items-center">
                       <Text className="text-slate-50 font-bold text-xl">
@@ -50,7 +51,10 @@ const Profile = () => {
                         35-070-0003-3256-2022
                       </Text>
                       <TouchableOpacity className="flex flex-row pl-2 gap-1">
-                        <FontAwesomeIcon icon={faCopy} color="color: rgb(156 163 175)" />
+                        <FontAwesomeIcon
+                          icon={faCopy}
+                          color="color: rgb(156 163 175)"
+                        />
                         <Text className="text-gray-400">Copy</Text>
                       </TouchableOpacity>
                     </View>
@@ -62,48 +66,13 @@ const Profile = () => {
               </ImageBackground>
             </View>
           </View>
-          <View className="p-[9px]">
-            <View className="w-full bg-white rounded-lg h-[56px] flex justify-center mb-2">
-              <TouchableOpacity>
-                <Link href="Profile/Account">
-                  <View className="flex flex-row items-center justify-between p-4">
-                    <Text>Account</Text>
-                    <FontAwesomeIcon icon={faAngleRight} color="blue" />
-                  </View>
-                </Link>
-              </TouchableOpacity>
-            </View>
-            <View className="w-full bg-white rounded-lg h-[56px] flex justify-center mb-2">
-              <TouchableOpacity className="flex flex-row items-center justify-between p-4">
-                <Text>Debit Card Setting</Text>
-                <FontAwesomeIcon icon={faAngleRight} color="blue" />
-              </TouchableOpacity>
-            </View>
-            <View className="w-full bg-white rounded-lg h-[56px] flex justify-center mb-2">
-              <TouchableOpacity className="flex flex-row items-center justify-between p-4">
-                <Text>Security</Text>
-                <FontAwesomeIcon icon={faAngleRight} color="blue" />
-              </TouchableOpacity>
-            </View>
-            <View className="w-full bg-white rounded-lg h-[56px] flex justify-center mb-2">
-              <TouchableOpacity className="flex flex-row items-center justify-between p-4">
-                <Text>Language</Text>
-                <FontAwesomeIcon icon={faAngleRight} color="blue" />
-              </TouchableOpacity>
-            </View>
-            <View className="w-full bg-white rounded-lg h-[56px] flex justify-center mb-2">
-              <TouchableOpacity className="flex flex-row items-center justify-between p-4">
-                <Text>FAQ</Text>
-                <FontAwesomeIcon icon={faAngleRight} color="blue" />
-              </TouchableOpacity>
-            </View>
-            <View className="w-full bg-white rounded-lg h-[56px] flex justify-center mb-2">
-              <TouchableOpacity className="flex flex-row items-center justify-between p-4">
-                <Text>Help Center</Text>
-                <FontAwesomeIcon icon={faAngleRight} color="blue" />
-              </TouchableOpacity>
-            </View>
-            <TouchableOpacity className="w-[315px] bg-white mx-[15px] rounded-lg h-[40px] flex justify-center mb-2 border-red-600 border items-center">
+          <View className="px-6">
+            <ProfileItem title="Account" />
+            <ProfileItem title="Beneficiary" />
+            <ProfileItem title="Security" />
+            <ProfileItem title="Settings" />
+            <ProfileItem title="Help Center" />
+            <TouchableOpacity className="w-[315px] bg-white mt-3 rounded-lg h-[40px] flex justify-center mb-2 border-red-600 border items-center">
               <Text className="text-red-600"> Log out</Text>
             </TouchableOpacity>
           </View>

@@ -8,8 +8,9 @@ import {
 } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faUser, faChevronDown } from "@fortawesome/free-solid-svg-icons";
-import { InputItem } from "../../components";
-const Transfer = () => {
+import { InputItem } from "../../../components";
+
+const TopUp = () => {
   return (
     <SafeAreaView className="bg-gray-200 h-full">
       <ScrollView>
@@ -31,16 +32,12 @@ const Transfer = () => {
           </View>
           <View className="">
             <View className="gap-1">
-              <Text className="text-sm">To</Text>
               <View className="bg-slate-50 p-[9px] rounded-md mb-10">
-                <InputItem title="Account Number" />
-                <InputItem title="Account Name" />
-                <InputItem title="Amount" />
-                <InputItem title="Transaction Remark" />
+                <InputItem title="Top Up Amount" />
                 <View className="mt-2">
                   <TouchableOpacity className=" h-[48px] p-2 border-2 border-gray-300 rounded-2xl justify-center bg-black ">
                     <Text className="text-center text-md font-bold text-slate-50">
-                      Confirm Transaction
+                      Confirm Top Up
                     </Text>
                   </TouchableOpacity>
                 </View>
@@ -53,4 +50,4 @@ const Transfer = () => {
   );
 };
 
-export default Transfer;
+export default TopUp;
