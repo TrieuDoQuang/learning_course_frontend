@@ -1,3 +1,5 @@
 import TransactionItem from "./TransactionItem";
 import AccountItem from "./AccountItem";
-export { TransactionItem, AccountItem };
+import FeatureItem from "./FeatureItem";
+
+export { TransactionItem, AccountItem, FeatureItem };

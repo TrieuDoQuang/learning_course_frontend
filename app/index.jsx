@@ -22,11 +22,11 @@ export default function App() {
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => {
-          router.push("/SignIn");
+          router.push("/Login");
         }}
         className="bg-blue-500 p-2 rounded-md"
       >
-        <Text className="text-white">Sign in</Text>
+        <Text className="text-white">Login</Text>
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => {
