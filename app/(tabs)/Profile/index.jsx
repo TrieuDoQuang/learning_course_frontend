@@ -4,6 +4,7 @@ import {
   ScrollView,
   TextInput,
   TouchableOpacity,
+  ImageBackground
 } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
@@ -13,6 +14,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { Link } from "expo-router";
+import images from "../../assets";
 
 const Profile = () => {
   return (
@@ -24,38 +26,40 @@ const Profile = () => {
               <Text className="text-center pb-4 text-[20px] font-bold ">
                 Profile
               </Text>
-              <View className=" bg-gray-100 w-[315px] h-[180px] rounded-lg">
-                <View className="p-6 flex gap-3">
-                  <View className="flex flex-row justify-between items-center">
-                    <Text className="text-white font-bold text-xl">
-                      Do Quang Trieu
-                    </Text>
-                    <Text className="text-white uppercase italic">
-                      {" "}
-                      TDK BANK
-                    </Text>
-                  </View>
-                  <View>
-                    <FontAwesomeIcon
-                      icon={faSimCard}
-                      color="yellow"
-                      size={20}
-                    />
-                  </View>
-                  <View className="flex flex-row">
-                    <Text className="text-white font-bold text-sm">
-                      35-070-0003-3256-2022
-                    </Text>
-                    <TouchableOpacity className="flex flex-row pl-2 gap-1">
-                      <FontAwesomeIcon icon={faCopy} color="gray" />
-                      <Text className="text-gray-500">Copy</Text>
-                    </TouchableOpacity>
-                  </View>
-                  <View>
-                    <Text className="text-gray-500">Exp. 12/26</Text>
+              <ImageBackground source={images.background}>
+                <View className="w-[315px] h-[180px] rounded-lg">
+                  <View className="p-6 flex gap-3">
+                    <View className="flex flex-row justify-between items-center">
+                      <Text className="text-slate-50 font-bold text-xl">
+                        Do Quang Trieu
+                      </Text>
+                      <Text className="text-slate-50 uppercase italic">
+                        {" "}
+                        TDK BANK
+                      </Text>
+                    </View>
+                    <View>
+                      <FontAwesomeIcon
+                        icon={faSimCard}
+                        color="yellow"
+                        size={20}
+                      />
+                    </View>
+                    <View className="flex flex-row">
+                      <Text className="text-slate-50 font-bold text-sm">
+                        35-070-0003-3256-2022
+                      </Text>
+                      <TouchableOpacity className="flex flex-row pl-2 gap-1">
+                        <FontAwesomeIcon icon={faCopy} color="color: rgb(156 163 175)" />
+                        <Text className="text-gray-400">Copy</Text>
+                      </TouchableOpacity>
+                    </View>
+                    <View>
+                      <Text className="text-gray-400">Exp. 12/26</Text>
+                    </View>
                   </View>
                 </View>
-              </View>
+              </ImageBackground>
             </View>
           </View>
           <View className="p-[9px]">
