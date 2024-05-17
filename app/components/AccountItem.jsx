@@ -1,11 +1,9 @@
-import { View, Text } from "react-native";
+import React from 'react'
 
 const AccountItem = () => {
   return (
-    <View>
-      <Text>AccountItem</Text>
-    </View>
-  );
-};
+    <div>AccountItem</div>
+  )
+}
 
-export default AccountItem;
+export default AccountItem
