@@ -8,9 +8,9 @@ import {
 } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faUser, faChevronDown } from "@fortawesome/free-solid-svg-icons";
-import { InputItem } from "../../../components";
 
 import images from "../../../assets";
+import { Category } from "../../../components";
 
 const Rewards = () => {
   return (
@@ -34,16 +34,50 @@ const Rewards = () => {
             </View>
           </View>
           <View className="my-5">
-            <Text className="text-sm">Shopping Voucher</Text>
-            <View className="grid grid-cols-3">
-              <View className="">
-                <Image/>
-                <View>
-                  <Text>100 RWP</Text>
-                  <Text>10% Discount</Text>
-                </View>
-              </View>
-            </View>
+            <Text className="text-sm mb-2">Shopping Voucher</Text>
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+            >
+              <Category
+                image={images.background}
+                title="Voucher 200,000 VND purchasing at..."
+                price="250"
+              />
+              <Category
+                image={images.background}
+                title="Voucher 200,000 VND purchasing at..."
+                price="250"
+              />
+              <Category
+                image={images.background}
+                title="Voucher 200,000 VND purchasing at..."
+                price="250"
+              />
+            </ScrollView>
+          </View>
+          <View className="my-5">
+            <Text className="text-sm mb-2">Culinary Voucher</Text>
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+            >
+              <Category
+                image={images.background}
+                title="Voucher 200,000 VND purchasing at..."
+                price="250"
+              />
+              <Category
+                image={images.background}
+                title="Voucher 200,000 VND purchasing at..."
+                price="250"
+              />
+              <Category
+                image={images.background}
+                title="Voucher 200,000 VND purchasing at..."
+                price="250"
+              />
+            </ScrollView>
           </View>
         </View>
       </ScrollView>
