@@ -8,7 +8,7 @@ const ProfileItem = ({ title }) => {
     <View className="w-full bg-slate-50 rounded-lg h-[52px] flex justify-center mb-3">
       <TouchableOpacity className="flex flex-row items-center justify-between p-4">
         <Text>{title}</Text>
-        <Link href={`Profile/${title}`}>
+        <Link href={`/Profile/${title}`}>
           <FontAwesomeIcon icon={faAngleRight} color="blue" />
         </Link>
       </TouchableOpacity>
