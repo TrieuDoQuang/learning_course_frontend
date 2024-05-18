@@ -6,7 +6,7 @@ import {
   TextInput,
   Image,
   TouchableOpacity,
-  ImageBackground 
+  ImageBackground,
 } from "react-native";
 import { Link } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -23,7 +23,6 @@ import {
 import images from "../../assets";
 import { FeatureItem, TransactionItem } from "../../components";
 
-
 const Home = () => {
   const [selectedButton, setSelectedButton] = useState("All");
 
@@ -32,8 +31,11 @@ const Home = () => {
   return (
     <SafeAreaView className="h-full bg-gray-200">
       <ScrollView>
-        <View className="">
-          <ImageBackground className="justify-center p-[9px] items-center h-[256px]" source={images.background}>
+        <View className="mb-6">
+          <ImageBackground
+            className="justify-center p-[9px] items-center h-[256px]"
+            source={images.background}
+          >
             <View className="w-full h-[200px] px-2">
               <View className="flex flex-row gap-3 items-center">
                 <FontAwesomeIcon icon={faUser} size={30} color="orange" />
@@ -47,7 +49,10 @@ const Home = () => {
                         <Text className="mr-2 text-gray-400 text-md">
                           Payment Account
                         </Text>
-                        <FontAwesomeIcon icon={faAngleRight} color="rgb(156 163 175)" />
+                        <FontAwesomeIcon
+                          icon={faAngleRight}
+                          color="rgb(156 163 175)"
+                        />
                       </View>
                     </Link>
                   </TouchableOpacity>
@@ -99,14 +104,44 @@ const Home = () => {
               </TouchableOpacity>
             </View>
             <View className="px-11 mt-4">
-              <TransactionItem image={images.avatar} name="Do Quang Trieu" date="14 May 2024" amount="200.000"/>
-              <TransactionItem image={images.avatar} name="Do Quang Trieu" date="14 May 2024" amount="200.000"/>
-              <TransactionItem image={images.avatar} name="Do Quang Trieu" date="14 May 2024" amount="200.000"/>
-              <TransactionItem image={images.avatar} name="Do Quang Trieu" date="14 May 2024" amount="200.000"/>
-              <TransactionItem image={images.avatar} name="Do Quang Trieu" date="14 May 2024" amount="200.000"/>
-              <TransactionItem image={images.avatar} name="Do Quang Trieu" date="14 May 2024" amount="200.000"/>
+              <TransactionItem
+                image={images.avatar}
+                name="Do Quang Trieu"
+                date="14 May 2024"
+                amount="200.000"
+              />
+              <TransactionItem
+                image={images.avatar}
+                name="Do Quang Trieu"
+                date="14 May 2024"
+                amount="200.000"
+              />
+              <TransactionItem
+                image={images.avatar}
+                name="Do Quang Trieu"
+                date="14 May 2024"
+                amount="200.000"
+              />
+              <TransactionItem
+                image={images.avatar}
+                name="Do Quang Trieu"
+                date="14 May 2024"
+                amount="200.000"
+              />
+              <TransactionItem
+                image={images.avatar}
+                name="Do Quang Trieu"
+                date="14 May 2024"
+                amount="200.000"
+              />
+              <TransactionItem
+                image={images.avatar}
+                name="Do Quang Trieu"
+                date="14 May 2024"
+                amount="200.000"
+              />
             </View>
-            </View>
+          </View>
         </View>
       </ScrollView>
     </SafeAreaView>

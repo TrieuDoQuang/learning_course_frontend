@@ -12,7 +12,7 @@ const Payment = () => {
     <>
       <SafeAreaView>
         <ScrollView>
-          <View className="px-3 mb-10">
+          <View className="px-3 my-10">
             <View className="flex-row items-center justify-between mb-6">
               <Text className="font-bold">Payment Account</Text>
               <View className="flex-row items-center bg-black rounded-md p-3">
