@@ -7,24 +7,51 @@ import {
   Image,
 } from "react-native";
 import { Link } from "expo-router";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-
 import { useState } from "react";
-// import CheckBox from "@react-native-community/checkbox";
-
 import { SafeAreaView } from "react-native-safe-area-context";
 import images from "../assets";
-const Login = () => {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
-  const [isSelected, setSelection] = useState(false);
+import { LoginData } from "../data/LoginData";
+import { login } from "../services/LoginService";
+import { useAuth } from "../hooks";
 
-  console.log(username);
-  console.log(password);
-  const handleLogin = () => {
-    // Handle login logic here
+const Login = () => {
+  const [loginData, setLoginData] = useState(LoginData);
+  const { setAuth, setIsLoggedIn, persist, setPersist } = useAuth();
+
+  const handleInputChange = (name, value) => {
+    setLoginData({
+      ...loginData,
+      [name]: value,
+    });
   };
+
+  console.log(loginData);
+  
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const response = await login(loginData);
+    console.log(response);
+    const loggedInResponse = response?.data.result;
+
+    if (loggedInResponse?.full_name != undefined) {
+      const token = loggedInResponse?.token;
+      const accountId = loggedInResponse?.id;
+      const refreshToken = loggedInResponse?.refresh_token;
+      const fullName = loggedInResponse?.full_name;
+
+      setPersist(true);
+
+      if (persist)
+        cookies.set("refreshToken", refreshToken, {
+          expires: new Date(Date.now() + 86400 * 1000),
+        });
+
+      setAuth({ accountId, token, refreshToken, fullName });
+
+      setIsLoggedIn(true);
+    }
+  };
+
   return (
     <SafeAreaView className=" h-full">
       <ScrollView>
@@ -41,19 +68,16 @@ const Login = () => {
             <View className="">
               <Text className="text-[12px] mb-1">Username or Email</Text>
               <TextInput
-                value={username}
-                onChangeText={(prev) => {
-                  setUsername(prev);
-                }}
+                value={loginData.email}
+                onChangeText={(value) => handleInputChange("email", value)}
                 placeholder="user@gmail.com"
                 className="mb-3 h-[48px] p-2 border-2 border-gray-300 rounded-2xl focus:outline-none focus:border-blue-400"
               />
               <Text className="text-[12px] mb-1">Password</Text>
               <TextInput
-                value={password}
-                onChangeText={(prev) => {
-                  setPassword(prev);
-                }}
+                name="password"
+                value={loginData.password}
+                onChangeText={(value) => handleInputChange("password", value)}
                 placeholder="*********"
                 secureTextEntry
                 className=" h-[48px] p-2 border-2 border-gray-300 rounded-2xl focus:outline-none focus:border-blue-400"
@@ -73,7 +97,10 @@ const Login = () => {
                 <Image source={images.faceId} />
               </View>
             </TouchableOpacity>
-            <TouchableOpacity className="mb-4 bg-black p-2 flex flex-row rounded-xl h-[48px] items-center  justify-center">
+            <TouchableOpacity
+              className="mb-4 bg-black p-2 flex flex-row rounded-xl h-[48px] items-center justify-center"
+              onPress={handleSubmit}
+            >
               <Text className="text-stone-50 text-center font-bold pr-2">
                 Login Now
               </Text>

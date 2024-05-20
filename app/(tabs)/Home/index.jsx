@@ -1,10 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import {
   View,
   Text,
   ScrollView,
-  TextInput,
-  Image,
   TouchableOpacity,
   ImageBackground,
 } from "react-native";
@@ -17,13 +15,18 @@ import {
   faMoneyBillTransfer,
   faFileArrowUp,
   faWallet,
-  faBars,
   faGift,
 } from "@fortawesome/free-solid-svg-icons";
 import images from "../../assets";
 import { FeatureItem, TransactionItem } from "../../components";
 
 const Home = () => {
+
+  // const [paymentAccount, setPaymentAccount] = useState({
+  //   name: "Chau Hoang Gia Dat",
+  //   balance: "2.000.000 VND",
+  // });
+
   const [selectedButton, setSelectedButton] = useState("All");
 
   const buttons = ["All", "Transfer", "Withdraw", "Top up", "More"];
