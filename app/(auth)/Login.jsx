@@ -26,11 +26,11 @@ const Login = () => {
   };
 
   console.log(loginData);
-  
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const response = await login(loginData);
-    console.log(response);
+    console.log(response?.data.result);
     const loggedInResponse = response?.data.result;
 
     if (loggedInResponse?.full_name != undefined) {
