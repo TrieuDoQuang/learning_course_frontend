@@ -3,14 +3,13 @@ import { Slot, Stack, useRouter } from "expo-router";
 import { useEffect, useState, useContext } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as TokenUtil from "./utils/TokenUtil";
-
+import RootLayout from "./_layout";
 import AuthContextProvider, { AuthContext } from "./context/AuthContext";
 
 const Root = () => {
   const authContext = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(true);
   const router = useRouter();
-  const Stack = Slot.Stack;
 
   useEffect(() => {
     const fetchToken = async () => {
@@ -43,10 +42,9 @@ const Root = () => {
   useEffect(() => {
     if (!isLoading) {
       if (authContext.isAuthenticated) {
-        console.log("Authenticated");
-        router.replace("/(tabs)/Home");
+        router.replace("/App");
       } else {
-        router.replace("/(auth)/Login");
+        router.replace("/Login");
       }
     }
   }, [isLoading, authContext.isAuthenticated]);
@@ -55,7 +53,7 @@ const Root = () => {
     return <ActivityIndicator size="large" color="grey" style={{ flex: 1 }} />;
   }
 
-  return null;
+  return <RootLayout />;
 };
 
 export default function App() {
