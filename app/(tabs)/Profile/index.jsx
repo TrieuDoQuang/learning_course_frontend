@@ -13,11 +13,17 @@ import {
   faAngleRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { SafeAreaView } from "react-native-safe-area-context";
-import { Link } from "expo-router";
+import { Link, router } from "expo-router";
 import images from "../../assets";
 import { ProfileItem } from "../../components";
-
+import { AuthContext } from "../../context/AuthContext";
+import { useContext } from "react";
 const Profile = () => {
+  const authContext = useContext(AuthContext);
+  const handleLogout = () => {
+    authContext.logout();
+    router.replace("/Login");
+  };
   return (
     <SafeAreaView className="h-full bg-gray-200">
       <ScrollView>
@@ -72,7 +78,10 @@ const Profile = () => {
             <ProfileItem title="Security" />
             <ProfileItem title="Settings" />
             <ProfileItem title="Help Center" />
-            <TouchableOpacity className="w-[315px] bg-white mt-3 rounded-lg h-[40px] flex justify-center mb-2 border-red-600 border items-center">
+            <TouchableOpacity
+              className="w-[315px] bg-white mt-3 rounded-lg h-[40px] flex justify-center mb-2 border-red-600 border items-center"
+              onPress={handleLogout}
+            >
               <Text className="text-red-600"> Log out</Text>
             </TouchableOpacity>
           </View>

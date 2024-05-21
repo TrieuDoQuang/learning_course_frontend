@@ -6,24 +6,45 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import { Link } from "expo-router";
+import { Link, Redirect, router } from "expo-router";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import * as httpRequest from "../utils/httpRequest";
+import { AuthContext } from "../context/AuthContext";
 
-import { useState } from "react";
+import { useState, useContext } from "react";
 // import CheckBox from "@react-native-community/checkbox";
 
 import { SafeAreaView } from "react-native-safe-area-context";
 import images from "../assets";
 const Login = () => {
-  const [username, setUsername] = useState("");
+  const authContext = useContext(AuthContext);
+  const [auth, setAuth] = useState(null);
+
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [isSelected, setSelection] = useState(false);
-
-  console.log(username);
+  console.log(email);
   console.log(password);
-  const handleLogin = () => {
-    // Handle login logic here
+  const handleLogin = async () => {
+    try {
+      const response = await httpRequest.post(
+        "/api/customers/login",
+        {
+          email: email,
+          password: password,
+        },
+        { withCredentials: true }
+      );
+      console.log(response.result.token);
+      console.log(response.result.refresh_token);
+
+      authContext.authenticate(response.result);
+      setAuth(response.result);
+      router.replace("/Home");
+    } catch (error) {
+      console.error("Couldn't login: ", error);
+    }
   };
   return (
     <SafeAreaView className=" h-full">
@@ -41,9 +62,9 @@ const Login = () => {
             <View className="">
               <Text className="text-[12px] mb-1">Username or Email</Text>
               <TextInput
-                value={username}
+                value={email}
                 onChangeText={(prev) => {
-                  setUsername(prev);
+                  setEmail(prev);
                 }}
                 placeholder="user@gmail.com"
                 className="mb-3 h-[48px] p-2 border-2 border-gray-300 rounded-2xl focus:outline-none focus:border-blue-400"
@@ -73,7 +94,10 @@ const Login = () => {
                 <Image source={images.faceId} />
               </View>
             </TouchableOpacity>
-            <TouchableOpacity className="mb-4 bg-black p-2 flex flex-row rounded-xl h-[48px] items-center  justify-center">
+            <TouchableOpacity
+              className="mb-4 bg-black p-2 flex flex-row rounded-xl h-[48px] items-center  justify-center"
+              onPress={() => handleLogin()}
+            >
               <Text className="text-stone-50 text-center font-bold pr-2">
                 Login Now
               </Text>
