@@ -1,11 +1,11 @@
 import { View, Text } from "react-native";
 
-const Account = () => {
+const Beneficiary = () => {
   return (
     <View>
-      <Text>Account</Text>
+      <Text>Beneficiary</Text>
     </View>
   );
 };
 
-export default Account;
+export default Beneficiary;

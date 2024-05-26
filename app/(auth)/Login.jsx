@@ -6,46 +6,57 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
+import { Link } from "expo-router";
+import { useState } from "react";
 import { Link, Redirect, router } from "expo-router";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
 import * as httpRequest from "../utils/httpRequest";
-import { AuthContext } from "../context/AuthContext";
-
 import { useState, useContext } from "react";
-// import CheckBox from "@react-native-community/checkbox";
-
 import { SafeAreaView } from "react-native-safe-area-context";
 import images from "../assets";
+import { LoginData } from "../data/LoginData";
+import { login } from "../services/LoginService";
+import { useAuth } from "../hooks";
+
 const Login = () => {
-  const authContext = useContext(AuthContext);
-  const [auth, setAuth] = useState(null);
+  const [loginData, setLoginData] = useState(LoginData);
+  const { setAuth, setIsLoggedIn, persist, setPersist } = useAuth();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isSelected, setSelection] = useState(false);
-  console.log(email);
-  console.log(password);
-  const handleLogin = async () => {
-    try {
-      const response = await httpRequest.post(
-        "/api/customers/login",
-        {
-          email: email,
-          password: password,
-        },
-        { withCredentials: true }
-      );
-      console.log(response.result.token);
-      console.log(response.result.refresh_token);
+  const handleInputChange = (name, value) => {
+    setLoginData({
+      ...loginData,
+      [name]: value,
+    });
+  };
 
-      authContext.authenticate(response.result);
-      setAuth(response.result);
-      router.replace("/Home");
-    } catch (error) {
-      console.error("Couldn't login: ", error);
+  console.log(loginData);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const response = await login(loginData);
+    console.log(response?.data.result);
+    const loggedInResponse = response?.data.result;
+
+    if (loggedInResponse?.full_name != undefined) {
+      const token = loggedInResponse?.token;
+      const accountId = loggedInResponse?.id;
+      const refreshToken = loggedInResponse?.refresh_token;
+      const fullName = loggedInResponse?.full_name;
+
+      setPersist(true);
+
+      if (persist)
+        cookies.set("refreshToken", refreshToken, {
+          expires: new Date(Date.now() + 86400 * 1000),
+        });
+
+      setAuth({ accountId, token, refreshToken, fullName });
+
+      setIsLoggedIn(true);
     }
   };
+
   return (
     <SafeAreaView className=" h-full">
       <ScrollView>
@@ -62,19 +73,16 @@ const Login = () => {
             <View className="">
               <Text className="text-[12px] mb-1">Username or Email</Text>
               <TextInput
-                value={email}
-                onChangeText={(prev) => {
-                  setEmail(prev);
-                }}
+                value={loginData.email}
+                onChangeText={(value) => handleInputChange("email", value)}
                 placeholder="user@gmail.com"
                 className="mb-3 h-[48px] p-2 border-2 border-gray-300 rounded-2xl focus:outline-none focus:border-blue-400"
               />
               <Text className="text-[12px] mb-1">Password</Text>
               <TextInput
-                value={password}
-                onChangeText={(prev) => {
-                  setPassword(prev);
-                }}
+                name="password"
+                value={loginData.password}
+                onChangeText={(value) => handleInputChange("password", value)}
                 placeholder="*********"
                 secureTextEntry
                 className=" h-[48px] p-2 border-2 border-gray-300 rounded-2xl focus:outline-none focus:border-blue-400"
