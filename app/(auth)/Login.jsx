@@ -8,6 +8,11 @@ import {
 } from "react-native";
 import { Link } from "expo-router";
 import { useState } from "react";
+import { Link, Redirect, router } from "expo-router";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import * as httpRequest from "../utils/httpRequest";
+import { useState, useContext } from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import images from "../assets";
 import { LoginData } from "../data/LoginData";
@@ -98,8 +103,8 @@ const Login = () => {
               </View>
             </TouchableOpacity>
             <TouchableOpacity
-              className="mb-4 bg-black p-2 flex flex-row rounded-xl h-[48px] items-center justify-center"
-              onPress={handleSubmit}
+              className="mb-4 bg-black p-2 flex flex-row rounded-xl h-[48px] items-center  justify-center"
+              onPress={() => handleLogin()}
             >
               <Text className="text-stone-50 text-center font-bold pr-2">
                 Login Now
