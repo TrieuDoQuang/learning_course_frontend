@@ -6,22 +6,19 @@ import {
   TouchableOpacity,
   Image,
 } from "react-native";
-import { Link } from "expo-router";
-import { useState } from "react";
-import { Link, Redirect, router } from "expo-router";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
-import * as httpRequest from "../utils/httpRequest";
 import { useState, useContext } from "react";
+import { Link, Redirect, router } from "expo-router";
 import { SafeAreaView } from "react-native-safe-area-context";
 import images from "../assets";
 import { LoginData } from "../data/LoginData";
 import { login } from "../services/LoginService";
 import { useAuth } from "../hooks";
+import { AuthContext } from "../context/AuthContext";
 
 const Login = () => {
   const [loginData, setLoginData] = useState(LoginData);
-  const { setAuth, setIsLoggedIn, persist, setPersist } = useAuth();
+  const authContext = useContext(AuthContext);
+  // const { setAuth, setIsLoggedIn, persist, setPersist } = useAuth();
 
   const handleInputChange = (name, value) => {
     setLoginData({
@@ -32,28 +29,19 @@ const Login = () => {
 
   console.log(loginData);
 
-  const handleSubmit = async (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    const response = await login(loginData);
-    console.log(response?.data.result);
-    const loggedInResponse = response?.data.result;
-
-    if (loggedInResponse?.full_name != undefined) {
-      const token = loggedInResponse?.token;
-      const accountId = loggedInResponse?.id;
-      const refreshToken = loggedInResponse?.refresh_token;
-      const fullName = loggedInResponse?.full_name;
-
-      setPersist(true);
-
-      if (persist)
-        cookies.set("refreshToken", refreshToken, {
-          expires: new Date(Date.now() + 86400 * 1000),
-        });
-
-      setAuth({ accountId, token, refreshToken, fullName });
-
-      setIsLoggedIn(true);
+    try {
+      const response = await login(loginData);
+      console.log(response.data.result.token);
+      console.log(response.data.result.refresh_token);
+      await authContext.authenticate(
+        response.data.result.token,
+        response.data.result.refresh_token
+      );
+      router.replace("/Home");
+    } catch (error) {
+      console.error("Couldn't login: ", error);
     }
   };
 
@@ -104,7 +92,7 @@ const Login = () => {
             </TouchableOpacity>
             <TouchableOpacity
               className="mb-4 bg-black p-2 flex flex-row rounded-xl h-[48px] items-center  justify-center"
-              onPress={() => handleLogin()}
+              onPress={(e) => handleLogin(e)}
             >
               <Text className="text-stone-50 text-center font-bold pr-2">
                 Login Now

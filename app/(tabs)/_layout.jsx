@@ -1,5 +1,5 @@
-import { View, ImageBackground } from "react-native";
-import { Tabs } from "expo-router";
+import { View, ImageBackground, Text } from "react-native";
+import { Tabs, router } from "expo-router";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
   faHome,
@@ -9,8 +9,23 @@ import {
   faArrowRightArrowLeft,
 } from "@fortawesome/free-solid-svg-icons";
 import images from "../assets";
+import { useState, useContext } from "react";
+import { AuthContext } from "../context/AuthContext";
 
 const TabLayouts = () => {
+  const authContext = useContext(AuthContext);
+  const { token } = authContext;
+  const [isLoading, setIsLoading] = useState(true);
+
+  if (!token) {
+    setIsLoading(false);
+    router.replace("/(auth)/Login");
+  }
+
+  if (isLoading) {
+    <Text> Loading...</Text>;
+  }
+
   return (
     <>
       <Tabs
@@ -57,7 +72,6 @@ const TabLayouts = () => {
             ),
           }}
         />
-        
 
         <Tabs.Screen
           name="Transfer"

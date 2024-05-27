@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import {
   View,
   Text,
@@ -21,7 +21,6 @@ import images from "../../assets";
 import { FeatureItem, TransactionItem } from "../../components";
 
 const Home = () => {
-
   // const [paymentAccount, setPaymentAccount] = useState({
   //   name: "Chau Hoang Gia Dat",
   //   balance: "2.000.000 VND",
