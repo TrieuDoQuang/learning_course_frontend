@@ -1,6 +1,6 @@
 import { decode as atob, encode as btoa } from "base-64";
 import { jwtDecode } from "jwt-decode";
-import * as httpRequest from "./httpRequest";
+import axios from "../api/axios";
 if (!global.btoa) {
   global.btoa = btoa;
 }
@@ -24,10 +24,10 @@ export const checkNearExpiredToken = (token) => {
   else return false;
 };
 
-export const refreshToken = async (token) => {
+export const refreshToken = async (refreshToken) => {
   try {
-    const response = await httpRequest.post("/api/customers/refreshToken", {
-      token,
+    const response = await axios.post("/api/customers/refreshToken", {
+      refresh_token: refreshToken,
     });
     return response.data.result.token;
   } catch (error) {

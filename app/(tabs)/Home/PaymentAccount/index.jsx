@@ -10,6 +10,7 @@ import { useState, useEffect, useContext } from "react";
 import { useAxiosPrivate } from "../../../hooks";
 import { AuthContext } from "../../../context/AuthContext";
 import { PaymentAccountData } from "../../../data/PaymentAccountData";
+
 const Payment = () => {
   const authContext = useContext(AuthContext);
   const { token } = authContext;
