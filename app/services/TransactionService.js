@@ -1,14 +1,24 @@
-import axios from "../api/axios";
+import { useAxiosPrivate } from "../hooks";
 
-export const makeTransaction = async (transaction) => {
-  try {
-    const response = await axios.get(
-      "/transactions/makeTransaction",
-      paymentAccount
-    );
+const TransactionService = () => {
+  const axiosPrivate = useAxiosPrivate();
 
-    return response;
-  } catch (e) {
-    console.log("Error: " + e);
-  }
+  const makeTransaction = async (transaction) => {
+    try {
+      const response = await axiosPrivate.post(
+        "/transactions/makeTransaction",
+        transaction
+      );
+
+      return response;
+    } catch (e) {
+      console.log("Error: " + e);
+    }
+  };
+
+  return {
+    makeTransaction,
+  };
 };
+
+export default TransactionService;

@@ -7,12 +7,12 @@ import {
   faAngleRight,
 } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
-import PaymentAccount from "../../../services/PaymentAccountService";
+import PaymentAccountService from "../../../services/PaymentAccountService";
 import useAuth from "../../../hooks/useAuth";
 import { Link } from "expo-router";
 const Payment = () => {
   const [paymentAccounts, setPaymentAccounts] = useState([]);
-  const { getPaymentAccounts } = PaymentAccount();
+  const { getPaymentAccounts } = PaymentAccountService();
   const { customerId } = useAuth();
 
   useEffect(() => {
