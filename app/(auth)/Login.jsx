@@ -18,7 +18,6 @@ import { AuthContext } from "../context/AuthContext";
 const Login = () => {
   const [loginData, setLoginData] = useState(LoginData);
   const authContext = useContext(AuthContext);
-  // const { setAuth, setIsLoggedIn, persist, setPersist } = useAuth();
 
   const handleInputChange = (name, value) => {
     setLoginData({

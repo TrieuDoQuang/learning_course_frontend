@@ -12,8 +12,6 @@ export const unstable_settings = {
 
 export { ErrorBoundary } from "expo-router";
 
-// SplashScreen.preventAutoHideAsync();
-
 function RootLayout() {
   const authContext = useContext(AuthContext);
   const [isLoading, setIsLoading] = useState(true);
@@ -35,7 +33,7 @@ function RootLayout() {
           }
 
           console.log(storeToken);
-          await authContext.authenticate(storeToken);
+          await authContext.authenticate(storeToken, storeRefreshToken);
         }
       } catch (error) {
         console.error("Couldn't fetch token: ", error);

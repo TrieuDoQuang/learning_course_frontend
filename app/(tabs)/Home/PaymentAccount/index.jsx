@@ -6,17 +6,28 @@ import {
   faFileLines,
   faAngleRight,
 } from "@fortawesome/free-solid-svg-icons";
-import { useState, useEffect, useContext } from "react";
-import { useAxiosPrivate } from "../../../hooks";
-import { AuthContext } from "../../../context/AuthContext";
-import { PaymentAccountData } from "../../../data/PaymentAccountData";
-
+import { useState, useEffect } from "react";
+import PaymentAccount from "../../../services/PaymentAccountService";
+import useAuth from "../../../hooks/useAuth";
+import { Link } from "expo-router";
 const Payment = () => {
-  const authContext = useContext(AuthContext);
-  const { token } = authContext;
   const [paymentAccounts, setPaymentAccounts] = useState([]);
-  const axiosPrivate = useAxiosPrivate();
+  const { getPaymentAccounts } = PaymentAccount();
+  const { customerId } = useAuth();
 
+  useEffect(() => {
+    const fetchPaymentAccounts = async () => {
+      try {
+        const response = await getPaymentAccounts(customerId);
+        setPaymentAccounts(response.data.result.paymentAccounts);
+        console.log(response.data.result);
+      } catch (error) {
+        console.error("Failed to fetch payment accounts", error);
+      }
+    };
+
+    fetchPaymentAccounts();
+  }, []);
   return (
     <>
       <SafeAreaView>
@@ -31,45 +42,31 @@ const Payment = () => {
                 </Text>
               </View>
             </View>
-            <View className="flex-row items-center justify-between mb-4 bg-slate-100 py-2 px-2 rounded-md">
-              <View>
-                <View className="flex-row items-center mb-2">
-                  <FontAwesomeIcon icon={faFileLines} size={25} />
-                  <Text className="ml-2">8966625782</Text>
+            {paymentAccounts &&
+              paymentAccounts.map((paymentAccount) => (
+                <View
+                  className="flex-row items-center justify-between mb-4 bg-slate-100 py-2 px-2 rounded-md"
+                  key={paymentAccount.id}
+                >
+                  <View>
+                    <View className="flex-row items-center mb-2">
+                      <FontAwesomeIcon icon={faFileLines} size={25} />
+                      <Text className="ml-2">
+                        {paymentAccount.account_number}
+                      </Text>
+                    </View>
+                    <View className="flex-row">
+                      <Text className="text-gray-500">Available Balance</Text>
+                      <Text className="ml-2">
+                        {paymentAccount.current_balance}
+                      </Text>
+                    </View>
+                  </View>
+                  <Link href="/Home/PaymentAccount/PaymentAccountDetail">
+                    <FontAwesomeIcon icon={faAngleRight} size={20} />
+                  </Link>
                 </View>
-                <View className="flex-row">
-                  <Text className="text-gray-500">Available Balance</Text>
-                  <Text className="ml-2">12.000.000 VND</Text>
-                </View>
-              </View>
-              <FontAwesomeIcon icon={faAngleRight} size={20} />
-            </View>
-            <View className="flex-row items-center justify-between mb-4 bg-slate-100 py-2 px-2 rounded-md">
-              <View>
-                <View className="flex-row items-center mb-2">
-                  <FontAwesomeIcon icon={faFileLines} size={25} />
-                  <Text className="ml-2">8966625782</Text>
-                </View>
-                <View className="flex-row">
-                  <Text className="text-gray-500">Available Balance</Text>
-                  <Text className="ml-2">12.000.000 VND</Text>
-                </View>
-              </View>
-              <FontAwesomeIcon icon={faAngleRight} size={20} />
-            </View>
-            <View className="flex-row items-center justify-between mb-4 bg-slate-100 py-2 px-2 rounded-md">
-              <View>
-                <View className="flex-row items-center mb-2">
-                  <FontAwesomeIcon icon={faFileLines} size={25} />
-                  <Text className="ml-2">8966625782</Text>
-                </View>
-                <View className="flex-row">
-                  <Text className="text-gray-500">Available Balance</Text>
-                  <Text className="ml-2">12.000.000 VND</Text>
-                </View>
-              </View>
-              <FontAwesomeIcon icon={faAngleRight} size={20} />
-            </View>
+              ))}
           </View>
         </ScrollView>
       </SafeAreaView>

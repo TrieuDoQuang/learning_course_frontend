@@ -3,8 +3,8 @@ import { useEffect } from "react";
 import { refreshToken } from "../utils/TokenUtil";
 import useAuth from "./useAuth";
 const useAxiosPrivate = () => {
-  const refresh = refreshToken();
   const { token } = useAuth();
+  const refresh = refreshToken(token);
 
   useEffect(() => {
     const requestIntercept = axiosPrivate.interceptors.request.use(
@@ -23,7 +23,7 @@ const useAxiosPrivate = () => {
         const prevRequest = error?.config;
         if (error?.response?.status === 403 && !prevRequest?.sent) {
           prevRequest.sent = true;
-          const newAccessToken = await refresh(token);
+          const newAccessToken = await refresh();
           prevRequest.headers["Authorization"] = `Bearer ${newAccessToken}`;
           return axiosPrivate(prevRequest);
         }

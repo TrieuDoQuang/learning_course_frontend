@@ -26,11 +26,20 @@ export const checkNearExpiredToken = (token) => {
 
 export const refreshToken = async (refreshToken) => {
   try {
-    const response = await axios.post("/api/customers/refreshToken", {
-      refresh_token: refreshToken,
-    });
+    const response = await axios.post(
+      "/api/customers/refreshToken",
+      {
+        refresh_token: refreshToken,
+      },
+      {}
+    );
     return response.data.result.token;
   } catch (error) {
     console.log("Couldn't refresh token: ", error);
   }
+};
+
+export const decodeToken = (token) => {
+  const decodedToken = jwtDecode(token);
+  return decodedToken.customerId;
 };

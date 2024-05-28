@@ -1,10 +1,11 @@
 import { createContext, useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
+import { jwtDecode } from "jwt-decode";
 export const AuthContext = createContext({
   token: "",
   refreshToken: "",
   isAuthenticated: false,
+  customerId: "",
   authenticate: async (token, refreshToken) => {},
   logout: () => {},
 });
@@ -67,6 +68,7 @@ const AuthContextProvider = ({ children }) => {
     isAuthenticated: !!token,
     logout,
     authenticate,
+    customerId: token ? jwtDecode(token).customerId : "",
     isLoading, // Add this line
   };
 
