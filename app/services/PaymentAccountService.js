@@ -1,8 +1,9 @@
-import axios from "../api/axios";
 import { useAxiosPrivate } from "../hooks";
 
-const PaymentAccount = () => {
+const PaymentAccountService = () => {
+  
   const axiosPrivate = useAxiosPrivate();
+
   const insertPaymentAccount = async (paymentAccount) => {
     try {
       const response = await axiosPrivate.post(
@@ -15,6 +16,7 @@ const PaymentAccount = () => {
       console.log("Error: " + e);
     }
   };
+
   const getPaymentAccounts = async (customerId) => {
     try {
       const response = await axiosPrivate.get(
@@ -26,7 +28,24 @@ const PaymentAccount = () => {
       console.log("Cannot get Payment Accounts: " + e);
     }
   };
-  return { insertPaymentAccount, getPaymentAccounts };
+
+  const getCustomerNameByAccountNumber = async (accountNumber) => {
+    try {
+      const response = await axiosPrivate.get(
+        `/paymentAccounts/getByAccountNumber/${accountNumber}`
+      );
+
+      return response;
+    } catch (e) {
+      console.log("Cannot get Payment Accounts: " + e);
+    }
+  };
+
+  return {
+    insertPaymentAccount,
+    getPaymentAccounts,
+    getCustomerNameByAccountNumber,
+  };
 };
 
-export default PaymentAccount;
+export default PaymentAccountService;

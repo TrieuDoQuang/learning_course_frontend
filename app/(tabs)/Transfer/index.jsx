@@ -1,15 +1,86 @@
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
   SafeAreaView,
   ScrollView,
   TouchableOpacity,
+  Modal,
   TextInput,
 } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faUser, faChevronDown } from "@fortawesome/free-solid-svg-icons";
-import { InputItem } from "../../components";
+import InputItem from "../../components/InputItem"; // Adjust import as necessary
+import { router } from "expo-router";
+import CustomerService from "../../services/CustomerService";
+import PaymentAccountService from "../../services/PaymentAccountService";
+import { TransactionData } from "../../data/TransactionData";
+import { useAuth } from "../../hooks";
+
 const Transfer = () => {
+  const [isModalVisible, setModalVisible] = useState(false);
+  const [pin, setPin] = useState("");
+
+  const [transaction, setTransaction] = useState(TransactionData);
+
+  const { getPinNumberByCustomerId } = CustomerService();
+  const { getCustomerNameByAccountNumber } = PaymentAccountService();
+
+  const { customerId } = useAuth();
+
+  useEffect(() => {
+    const fetchCustomerName = async () => {
+      if (transaction.receiver_account_number.length === 10) {
+        try {
+          const response = await getCustomerNameByAccountNumber(
+            transaction.receiver_account_number
+          );
+          setTransaction((prevTransaction) => ({
+            ...prevTransaction,
+            receiver_account_name: response.data.result,
+          }));
+        } catch (error) {
+          console.error("Failed to fetch customer name:", error);
+        }
+      }
+    };
+
+    fetchCustomerName();
+  }, [transaction.receiver_account_number]);
+
+  const handleConfirmTransaction = () => {
+    if (
+      transaction.receiver_account_number &&
+      transaction.receiver_account_name &&
+      transaction.amount &&
+      transaction.transaction_remark
+    ) {
+      setModalVisible(true);
+    } else {
+      alert("Please fill in all fields before confirming the transaction.");
+    }
+  };
+
+  const handlePinSubmit = async () => {
+    const response = await getPinNumberByCustomerId(customerId);
+    const existingPinNumber = response.data.result;
+
+    if (String(existingPinNumber) === pin) {
+      router.push("/(tabs)/Transfer/ConfirmTransaction");
+    } else {
+      // Set notification for wrong PIN
+    }
+
+    setModalVisible(false);
+  };
+
+  const handleInputChange = (field, value) => {
+    setTransaction((prevTransaction) => ({
+      ...prevTransaction,
+      [field]: value,
+    }));
+  };
+
   return (
     <SafeAreaView className="bg-gray-200 h-full">
       <ScrollView>
@@ -29,16 +100,39 @@ const Transfer = () => {
               </View>
             </View>
           </View>
-          <View className="">
+          <View>
             <View className="gap-1">
               <Text className="text-sm">To</Text>
               <View className="bg-slate-50 p-[9px] rounded-md mb-10">
-                <InputItem title="Account Number" />
-                <InputItem title="Account Name" />
-                <InputItem title="Amount" />
-                <InputItem title="Transaction Remark" />
+                <InputItem
+                  title="Account Number"
+                  value={transaction.receiver_account_number}
+                  onChangeText={(value) =>
+                    handleInputChange("receiver_account_number", value)
+                  }
+                />
+                <InputItem
+                  title="Account Name"
+                  value={transaction.receiver_account_name}
+                  editable={false}
+                />
+                <InputItem
+                  title="Amount"
+                  value={transaction.amount}
+                  onChangeText={(value) => handleInputChange("amount", value)}
+                />
+                <InputItem
+                  title="Transaction Remark"
+                  value={transaction.transaction_remark}
+                  onChangeText={(value) =>
+                    handleInputChange("transaction_remark", value)
+                  }
+                />
                 <View className="mt-2">
-                  <TouchableOpacity className=" h-[48px] p-2 border-2 border-gray-300 rounded-2xl justify-center bg-black ">
+                  <TouchableOpacity
+                    className="h-[48px] p-2 border-2 border-gray-300 rounded-2xl justify-center bg-black"
+                    onPress={handleConfirmTransaction}
+                  >
                     <Text className="text-center text-md font-bold text-slate-50">
                       Confirm Transaction
                     </Text>
@@ -49,6 +143,39 @@ const Transfer = () => {
           </View>
         </View>
       </ScrollView>
+
+      <Modal
+        transparent={true}
+        visible={isModalVisible}
+        animationType="slide"
+        onRequestClose={() => setModalVisible(false)}
+      >
+        <View
+          className="flex-1 justify-center items-center mx-8 my-52 rounded-lg"
+          style={{ backgroundColor: "rgba(1, 1, 1, 0.8)" }}
+        >
+          <View className="bg-white p-6 rounded-lg w-full">
+            <Text className="text-lg font-bold mb-4 text-slate-50">
+              Enter Your PIN
+            </Text>
+            <TextInput
+              className="border-2 border-gray-300 p-2 mb-4 rounded-md text-slate-50"
+              keyboardType="numeric"
+              secureTextEntry={true}
+              value={pin}
+              onChangeText={setPin}
+            />
+            <TouchableOpacity
+              className="h-[48px] p-2 border-2 border-gray-300 rounded-2xl justify-center bg-black mb-4"
+              onPress={handlePinSubmit}
+            >
+              <Text className="text-center text-slate-50 font-bold">
+                Submit
+              </Text>
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
     </SafeAreaView>
   );
 };
