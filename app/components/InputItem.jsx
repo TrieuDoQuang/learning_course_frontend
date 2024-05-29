@@ -1,7 +1,13 @@
 import React from "react";
 import { Text, TextInput, View } from "react-native";
 
-const InputItem = ({ title, value, onChangeText, editable = true }) => {
+const InputItem = ({
+  title,
+  value,
+  onChangeText,
+  editable = true,
+  secureTextEntry = false,
+}) => {
   return (
     <View className="mb-3">
       <Text className="text-xs mb-[2px] ml-1">{title}</Text>
@@ -11,6 +17,7 @@ const InputItem = ({ title, value, onChangeText, editable = true }) => {
         value={value}
         onChangeText={onChangeText}
         editable={editable}
+        secureTextEntry={secureTextEntry}
       />
     </View>
   );

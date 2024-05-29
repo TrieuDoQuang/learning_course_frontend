@@ -28,7 +28,7 @@ const StackLayout = () => {
         }}
       />
       <Stack.Screen
-        name="Top Up"
+        name="TopUp"
         options={{
           headerShown: true,
           headerTitleAlign: "center",

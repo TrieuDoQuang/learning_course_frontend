@@ -1,8 +1,7 @@
 import { Slot, useRouter } from "expo-router";
-import React, { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext } from "react";
 import * as SplashScreen from "expo-splash-screen";
 import AuthContextProvider, { AuthContext } from "./context/AuthContext";
-import { DataProvider } from "./context/DataProvider";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ActivityIndicator, View, Text } from "react-native"; // Import Text from react-native
 import * as TokenUtil from "./utils/TokenUtil";
@@ -21,7 +20,7 @@ function RootLayout() {
   useEffect(() => {
     const fetchToken = async () => {
       try {
-        const storeToken = await AsyncStorage.getItem("token");
+        let storeToken = await AsyncStorage.getItem("token");
         const storeRefreshToken = await AsyncStorage.getItem("refreshToken");
 
         if (storeToken) {
@@ -30,7 +29,13 @@ function RootLayout() {
             authContext.logout();
           } else if (TokenUtil.checkNearExpiredToken(storeToken)) {
             console.log("Token near expired");
-            storeToken = await TokenUtil.refreshToken(storeRefreshToken);
+            const newToken = await TokenUtil.refreshToken(storeRefreshToken);
+            if (newToken) {
+              storeToken = newToken;
+              await AsyncStorage.setItem("token", newToken);
+            } else {
+              authContext.logout();
+            }
           }
 
           console.log(storeToken);
@@ -55,7 +60,7 @@ function RootLayout() {
         router.replace("/Login");
       }
     }
-  }, [isLoading, authContext.isAuthenticated]);
+  }, [isLoading, authContext.isAuthenticated, router]);
 
   if (isLoading) {
     return (
@@ -71,9 +76,7 @@ function RootLayout() {
 export default function App() {
   return (
     <AuthContextProvider>
-      <DataProvider>
-        <RootLayout />
-      </DataProvider>
+      <RootLayout />
     </AuthContextProvider>
   );
 }

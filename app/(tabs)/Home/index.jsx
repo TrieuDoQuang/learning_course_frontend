@@ -67,7 +67,7 @@ const Home = () => {
               <View className="flex flex-row justify-between mt-8">
                 <FeatureItem title="Transfer" icon={faMoneyBillTransfer} />
                 <FeatureItem title="Withdraw" icon={faFileArrowUp} />
-                <FeatureItem title="Top Up" icon={faWallet} />
+                <FeatureItem title="TopUp" icon={faWallet} />
                 <FeatureItem title="Rewards" icon={faGift} />
               </View>
             </View>

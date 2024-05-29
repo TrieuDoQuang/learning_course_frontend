@@ -1,11 +1,21 @@
+import { useEffect, useCallback } from "react";
 import { axiosPrivate } from "../api/axios";
-import { useEffect } from "react";
 import { refreshToken } from "../utils/TokenUtil";
 import useAuth from "./useAuth";
 
 const useAxiosPrivate = () => {
-  const { token } = useAuth();
-  const refresh = refreshToken(token);
+  const { token, setToken } = useAuth();
+
+  const refresh = useCallback(async () => {
+    try {
+      const newAccessToken = await refreshToken(token);
+      setToken(newAccessToken);
+      return newAccessToken;
+    } catch (error) {
+      console.error("Failed to refresh token: ", error);
+      throw error;
+    }
+  }, [token, setToken]);
 
   useEffect(() => {
     const requestIntercept = axiosPrivate.interceptors.request.use(

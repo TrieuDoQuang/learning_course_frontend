@@ -4,7 +4,7 @@ const StackLayout = () => {
   return (
     <Stack>
       <Stack.Screen
-        name="QR"
+        name="index"
         options={{
           headerShown: false,
         }}

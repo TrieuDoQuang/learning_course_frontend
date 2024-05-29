@@ -4,7 +4,7 @@ const StackLayout = () => {
   return (
     <Stack>
       <Stack.Screen
-        name="Notification"
+        name="index"
         options={{
           headerShown: false,
         }}

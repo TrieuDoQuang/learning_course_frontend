@@ -6,7 +6,7 @@ const StackLayout = () => {
   return (
     <Stack>
       <Stack.Screen
-        name="Transaction"
+        name="index"
         options={{
           headerShown: false,
         }}
