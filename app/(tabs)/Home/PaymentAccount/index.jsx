@@ -1,4 +1,4 @@
-import { View, Text, ScrollView } from "react-native";
+import { View, Text, ScrollView, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import {
@@ -9,12 +9,12 @@ import {
 import { useState, useEffect } from "react";
 import PaymentAccountService from "../../../services/PaymentAccountService";
 import useAuth from "../../../hooks/useAuth";
-import { Link } from "expo-router";
+import { Link, useLocalSearchParams, useRouter } from "expo-router";
 const PaymentAccount = () => {
   const [paymentAccounts, setPaymentAccounts] = useState([]);
   const { getPaymentAccounts } = PaymentAccountService();
   const { customerId } = useAuth();
-
+  const router = useRouter();
   useEffect(() => {
     const fetchPaymentAccounts = async () => {
       try {
@@ -28,6 +28,7 @@ const PaymentAccount = () => {
 
     fetchPaymentAccounts();
   }, []);
+
   return (
     <>
       <SafeAreaView>
@@ -62,9 +63,16 @@ const PaymentAccount = () => {
                       </Text>
                     </View>
                   </View>
-                  <Link href="/Home/PaymentAccount/AccountDetail">
+                  <TouchableOpacity
+                    onPress={() =>
+                      router.push({
+                        pathname: `/Home/PaymentAccount/AccountDetail`,
+                        params: paymentAccount,
+                      })
+                    }
+                  >
                     <FontAwesomeIcon icon={faAngleRight} size={20} />
-                  </Link>
+                  </TouchableOpacity>
                 </View>
               ))}
           </View>

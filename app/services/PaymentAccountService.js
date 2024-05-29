@@ -1,7 +1,6 @@
 import { useAxiosPrivate } from "../hooks";
 
 const PaymentAccountService = () => {
-  
   const axiosPrivate = useAxiosPrivate();
 
   const insertPaymentAccount = async (paymentAccount) => {
@@ -29,6 +28,18 @@ const PaymentAccountService = () => {
     }
   };
 
+  const getPaymentAccountById = async (paymentAccountId) => {
+    try {
+      const response = await axiosPrivate.get(
+        `/paymentAccounts/${paymentAccountId}`
+      );
+
+      return response;
+    } catch (e) {
+      console.log("Cannot get Payment Accounts: " + e);
+    }
+  };
+
   const getDefaultPaymentAccount = async (customerId) => {
     try {
       const response = await axiosPrivate.get(
@@ -40,7 +51,6 @@ const PaymentAccountService = () => {
       console.log("Cannot get Default Payment Account: " + e);
     }
   };
-
 
   const getCustomerNameByAccountNumber = async (accountNumber) => {
     try {
@@ -59,6 +69,7 @@ const PaymentAccountService = () => {
     getPaymentAccounts,
     getDefaultPaymentAccount,
     getCustomerNameByAccountNumber,
+    getPaymentAccountById,
   };
 };
 

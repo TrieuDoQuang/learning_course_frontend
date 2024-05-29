@@ -3,8 +3,12 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faFileLines } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
-
+import { useLocalSearchParams } from "expo-router";
 const PaymentAccountDetail = () => {
+  const paymentAccount = useLocalSearchParams();
+  console.log("payment aaa", paymentAccount);
+  useEffect(() => {}, []);
+
   return (
     <SafeAreaView>
       <ScrollView>
@@ -15,7 +19,7 @@ const PaymentAccountDetail = () => {
                 <FontAwesomeIcon icon={faFileLines} size={30} />
                 <View>
                   <Text>Do Quang Trieu</Text>
-                  <Text>0912121212</Text>
+                  <Text>{paymentAccount.account_number}</Text>
                 </View>
               </View>
               <View classNam="items-center">
@@ -36,18 +40,35 @@ const PaymentAccountDetail = () => {
                   <Text>Account Status</Text>
                   <Text>Account Type</Text>
                   <Text>Account Opening Date</Text>
+                  <Text>Account Closing Date</Text>
+
                   <Text>Account Balance</Text>
                   <Text>Reward Point</Text>
                   <Text>Banking</Text>
                 </View>
                 <View className="gap-3">
                   <Text className="font-bold">JOHN DOE</Text>
-                  <Text className="font-bold">04152121</Text>
-                  <Text className="font-bold">ACTIVE</Text>
-                  <Text className="font-bold">CLASSIC</Text>
-                  <Text className="font-bold">2024-04-01</Text>
-                  <Text className="font-bold">0 VND</Text>
-                  <Text className="font-bold">0 RWP</Text>
+                  <Text className="font-bold">
+                    {paymentAccount.account_number}
+                  </Text>
+                  <Text className="font-bold">
+                    {paymentAccount.account_status}
+                  </Text>
+                  <Text className="font-bold">
+                    {paymentAccount.account_type}
+                  </Text>
+                  <Text className="font-bold">
+                    {paymentAccount.date_opened}
+                  </Text>
+                  <Text className="font-bold">
+                    {paymentAccount.date_closed}
+                  </Text>
+                  <Text className="font-bold">
+                    {paymentAccount.current_balance}
+                  </Text>
+                  <Text className="font-bold">
+                    {paymentAccount.reward_point}
+                  </Text>
                   <Text className="font-bold">TDK BANKING</Text>
                 </View>
               </View>
