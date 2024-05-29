@@ -10,7 +10,7 @@ import { useState, useEffect } from "react";
 import PaymentAccountService from "../../../services/PaymentAccountService";
 import useAuth from "../../../hooks/useAuth";
 import { Link } from "expo-router";
-const Payment = () => {
+const PaymentAccount = () => {
   const [paymentAccounts, setPaymentAccounts] = useState([]);
   const { getPaymentAccounts } = PaymentAccountService();
   const { customerId } = useAuth();
@@ -62,7 +62,7 @@ const Payment = () => {
                       </Text>
                     </View>
                   </View>
-                  <Link href="/Home/PaymentAccount/PaymentAccountDetail">
+                  <Link href="/Home/PaymentAccount/AccountDetail">
                     <FontAwesomeIcon icon={faAngleRight} size={20} />
                   </Link>
                 </View>
@@ -74,4 +74,4 @@ const Payment = () => {
   );
 };
 
-export default Payment;
+export default PaymentAccount;

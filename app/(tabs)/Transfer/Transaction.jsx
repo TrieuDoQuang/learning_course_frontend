@@ -1,3 +1,4 @@
+// Transfer.js
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -9,27 +10,36 @@ import {
   TextInput,
 } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import { faUser, faChevronDown } from "@fortawesome/free-solid-svg-icons";
-import InputItem from "../../components/InputItem"; // Adjust import as necessary
-import { router } from "expo-router";
+import { faUser } from "@fortawesome/free-solid-svg-icons";
+import InputItem from "../../components/InputItem";
+import { useNavigation } from "@react-navigation/native";
 import CustomerService from "../../services/CustomerService";
 import PaymentAccountService from "../../services/PaymentAccountService";
-import { TransactionData } from "../../data/TransactionData";
+import { TransactionData, PaymentAccountData, CustomerData } from "../../data";
 import { useAuth } from "../../hooks";
+import { useData } from "../../context/DataProvider";
 
 const Transfer = () => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [pin, setPin] = useState("");
 
-  const [transaction, setTransaction] = useState(TransactionData);
+  const [sender, setSender] = useState(CustomerData);
+  const [defaultPaymentAccount, setDefaultPaymentAccount] =
+    useState(PaymentAccountData);
+  const [transaction, setTransaction] = useState({
+    ...TransactionData,
+    transaction_remark: "",
+  });
 
-  const { getPinNumberByCustomerId } = CustomerService();
-  const { getCustomerNameByAccountNumber } = PaymentAccountService();
-
+  const { getCustomerById } = CustomerService();
+  const { getCustomerNameByAccountNumber, getDefaultPaymentAccount } =
+    PaymentAccountService();
   const { customerId } = useAuth();
+  const { setTransaction: setTransactionContext } = useData();
+  const navigation = useNavigation();
 
   useEffect(() => {
-    const fetchCustomerName = async () => {
+    const fetchReceiverName = async () => {
       if (transaction.receiver_account_number.length === 10) {
         try {
           const response = await getCustomerNameByAccountNumber(
@@ -45,8 +55,41 @@ const Transfer = () => {
       }
     };
 
-    fetchCustomerName();
+    fetchReceiverName();
   }, [transaction.receiver_account_number]);
+
+  useEffect(() => {
+    const fetchSenderData = async () => {
+      try {
+        const response = await getCustomerById(customerId);
+        const senderData = response.data.result;
+        setSender(senderData);
+        setTransaction((prevTransaction) => ({
+          ...prevTransaction,
+          transaction_remark: senderData.name + " Chuyen tien",
+        }));
+      } catch (error) {
+        console.error("Failed to fetch sender data:", error);
+      }
+    };
+
+    const fetchDefaultPaymentAccount = async () => {
+      try {
+        const response = await getDefaultPaymentAccount(customerId);
+        const defaultAccount = response.data.result;
+        setDefaultPaymentAccount(defaultAccount);
+        setTransaction((prevTransaction) => ({
+          ...prevTransaction,
+          sender_account_number: defaultAccount.account_number,
+        }));
+      } catch (error) {
+        console.error("Failed to fetch default payment account:", error);
+      }
+    };
+
+    fetchDefaultPaymentAccount();
+    fetchSenderData();
+  }, []);
 
   const handleConfirmTransaction = () => {
     if (
@@ -62,11 +105,12 @@ const Transfer = () => {
   };
 
   const handlePinSubmit = async () => {
-    const response = await getPinNumberByCustomerId(customerId);
-    const existingPinNumber = response.data.result;
+    const response = await getCustomerById(customerId);
+    const existingPinNumber = response.data.result.pin_number;
 
     if (String(existingPinNumber) === pin) {
-      router.push("/(tabs)/Transfer/ConfirmTransaction");
+      setTransactionContext(transaction);
+      navigation.navigate("ConfirmTransaction");
     } else {
       // Set notification for wrong PIN
     }
@@ -91,12 +135,16 @@ const Transfer = () => {
               <View className="flex-row p-[9px] items-center">
                 <FontAwesomeIcon icon={faUser} color="orange" size={25} />
                 <View className="ml-4 mr-12">
-                  <Text>032299999 - Chau Hoang Gia Dat</Text>
-                  <Text className="text-lg font-bold">150.000 VND </Text>
+                  <Text>
+                    {defaultPaymentAccount.account_number} - {sender.name}
+                  </Text>
+                  <Text className="text-lg font-bold">
+                    {defaultPaymentAccount.current_balance
+                      .toLocaleString("en-US")
+                      .replace(/,/g, ".")}{" "}
+                    VND
+                  </Text>
                 </View>
-                <TouchableOpacity>
-                  <FontAwesomeIcon icon={faChevronDown} color="#3C84AB" />
-                </TouchableOpacity>
               </View>
             </View>
           </View>
@@ -114,7 +162,6 @@ const Transfer = () => {
                 <InputItem
                   title="Account Name"
                   value={transaction.receiver_account_name}
-                  editable={false}
                 />
                 <InputItem
                   title="Amount"

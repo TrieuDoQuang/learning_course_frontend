@@ -4,20 +4,20 @@ const CustomerService = () => {
 
   const axiosPrivate = useAxiosPrivate();
 
-  const getPinNumberByCustomerId = async (customerId) => {
+  const getCustomerById = async (customerId) => {
     try {
       const response = await axiosPrivate.get(
-        `/customers/getPinNumber/${customerId}`
+        `/customers/getById/${customerId}`
       );
 
       return response;
     } catch (e) {
-      console.log("Cannot get Pin Number: " + e);
+      console.log("Cannot get Customer: " + e);
     }
   };
 
   return {
-    getPinNumberByCustomerId,
+    getCustomerById,
   };
 };
 

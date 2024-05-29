@@ -29,6 +29,19 @@ const PaymentAccountService = () => {
     }
   };
 
+  const getDefaultPaymentAccount = async (customerId) => {
+    try {
+      const response = await axiosPrivate.get(
+        `/paymentAccounts/getDefaultAccount/${customerId}`
+      );
+
+      return response;
+    } catch (e) {
+      console.log("Cannot get Default Payment Account: " + e);
+    }
+  };
+
+
   const getCustomerNameByAccountNumber = async (accountNumber) => {
     try {
       const response = await axiosPrivate.get(
@@ -44,6 +57,7 @@ const PaymentAccountService = () => {
   return {
     insertPaymentAccount,
     getPaymentAccounts,
+    getDefaultPaymentAccount,
     getCustomerNameByAccountNumber,
   };
 };

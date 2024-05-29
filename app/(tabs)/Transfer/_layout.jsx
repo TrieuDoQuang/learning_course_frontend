@@ -6,7 +6,7 @@ const StackLayout = () => {
   return (
     <Stack>
       <Stack.Screen
-        name="index"
+        name="Transaction"
         options={{
           headerShown: false,
         }}
@@ -15,6 +15,7 @@ const StackLayout = () => {
         name="ConfirmTransaction"
         options={{
           headerShown: true,
+          headerTitle: "Confirm Transaction",
           headerTitleAlign: "center",
           headerTitleStyle: { fontSize: 13, color: "#fff" },
           headerTintColor: "#fff",
