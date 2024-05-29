@@ -2,6 +2,7 @@ import { Slot, useRouter } from "expo-router";
 import React, { useEffect, useState, useContext } from "react";
 import * as SplashScreen from "expo-splash-screen";
 import AuthContextProvider, { AuthContext } from "./context/AuthContext";
+import { DataProvider } from "./context/DataProvider";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ActivityIndicator, View, Text } from "react-native"; // Import Text from react-native
 import * as TokenUtil from "./utils/TokenUtil";
@@ -70,7 +71,9 @@ function RootLayout() {
 export default function App() {
   return (
     <AuthContextProvider>
-      <RootLayout />
+      <DataProvider>
+        <RootLayout />
+      </DataProvider>
     </AuthContextProvider>
   );
 }

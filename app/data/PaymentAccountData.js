@@ -1,4 +1,4 @@
-export const PaymentAccountData = {
+export default PaymentAccountData = {
   id: 0,
   account_number: "",
   account_status: "",

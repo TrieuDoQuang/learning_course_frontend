@@ -15,6 +15,7 @@ const StackLayout = () => {
         name="PaymentAccount"
         options={{
           headerShown: true,
+          headerTitle: "Payment Account",
           headerTitleAlign: "center",
           headerTitleStyle: { fontSize: 13, color: "#fff" },
           headerTintColor: "#fff",

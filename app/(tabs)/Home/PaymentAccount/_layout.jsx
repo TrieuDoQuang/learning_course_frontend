@@ -4,22 +4,13 @@ import { ImageBackground } from "react-native";
 const StackLayout = () => {
   return (
     <Stack>
-      <Stack.Screen name="index" options={{ headerShown: false }} />
+      <Stack.Screen name="PaymentAccount" options={{ headerShown: false }} />
       <Stack.Screen
-        name="PaymentAccountDetail"
+        name="AccountDetail"
         options={{
-          headerShown: true,
-          headerTitleAlign: "center",
-          headerTitleStyle: { fontSize: 13, color: "#fff" },
-          headerTintColor: "#fff",
-          headerBackground: () => (
-            <ImageBackground
-              source={images.bglinear}
-              style={{ width: "100%", height: "100%" }}
-            />
-          ),
+          headerShown: false,
         }}
-      />
+      ></Stack.Screen>
     </Stack>
   );
 };
