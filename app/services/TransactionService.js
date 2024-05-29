@@ -3,11 +3,26 @@ import { useAxiosPrivate } from "../hooks";
 const TransactionService = () => {
   const axiosPrivate = useAxiosPrivate();
 
-  const makeTransaction = async (transaction) => {
+  const sendOtp = async (otpRequest) => {
+    try {
+
+      console.log(otpRequest)
+      const response = await axiosPrivate.post(
+        "/transactions/sendOtp",
+        otpRequest
+      );
+
+      return response;
+    } catch (e) {
+      console.log("Error: " + e);
+    }
+  };
+
+  const makeTransaction = async (otpVerificationRequest) => {
     try {
       const response = await axiosPrivate.post(
-        "/transactions/makeTransaction",
-        transaction
+        "/transactions/verifyOtpAndMakeTransaction",
+        otpVerificationRequest
       );
 
       return response;
@@ -17,6 +32,7 @@ const TransactionService = () => {
   };
 
   return {
+    sendOtp,
     makeTransaction,
   };
 };
