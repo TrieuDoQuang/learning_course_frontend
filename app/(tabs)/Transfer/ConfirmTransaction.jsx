@@ -12,16 +12,16 @@ import TransactionService from "../../services/TransactionService";
 const ConfirmTransaction = () => {
   const [otp, setOtp] = useState("");
   const { transaction } = useData();
-  const { verifyOtpAndMakeTransaction } = TransactionService();
+  const { makeTransaction } = TransactionService();
 
   const handleOtpSubmit = async () => {
     try {
-      await verifyOtpAndMakeTransaction({
-        receiverEmail: transaction.receiver_email,
+      await makeTransaction({
+        receiverEmail: transaction.sender_email,
         otp,
-        transaction,
+        transactionDTO: transaction,
       });
-      alert("Transaction completed!");
+      alert("Transaction Completed!");
     } catch (error) {
       console.error("Failed to verify OTP or make transaction:", error);
       alert("Invalid OTP or transaction failed");

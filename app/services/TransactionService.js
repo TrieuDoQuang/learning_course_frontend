@@ -7,11 +7,13 @@ const TransactionService = () => {
     try {
 
       console.log(otpRequest)
+
       const response = await axiosPrivate.post(
         "/transactions/sendOtp",
         otpRequest
       );
 
+      console.log(response)
       return response;
     } catch (e) {
       console.log("Error: " + e);

@@ -26,13 +26,10 @@ const Transfer = () => {
   const [pin, setPin] = useState("");
 
   const [sender, setSender] = useState(CustomerData);
-  const [receiver, setReceiver] = useState(CustomerData);
+
   const [defaultPaymentAccount, setDefaultPaymentAccount] =
     useState(PaymentAccountData);
-  const [transaction, setTransaction] = useState({
-    ...TransactionData,
-    transaction_remark: "",
-  });
+  const [transaction, setTransaction] = useState(TransactionData);
 
   const { getCustomerById } = CustomerService();
   const { getCustomerByAccountNumber, getDefaultPaymentAccount } =
@@ -49,7 +46,6 @@ const Transfer = () => {
           const response = await getCustomerByAccountNumber(
             transaction.receiver_account_number
           );
-          setReceiver(response.data.result);
 
           setTransaction((prevTransaction) => ({
             ...prevTransaction,
@@ -72,6 +68,7 @@ const Transfer = () => {
         setSender(senderData);
         setTransaction((prevTransaction) => ({
           ...prevTransaction,
+          sender_email: senderData.email,
           transaction_remark: senderData.name + " Chuyen tien",
         }));
       } catch (error) {
@@ -116,7 +113,7 @@ const Transfer = () => {
 
     if (String(existingPinNumber) === pin) {
       try {
-        await sendOtp({ receiver_email: receiver.email });
+        await sendOtp({ receiver_email: sender.email });
         setTransactionContext(transaction);
         navigation.navigate("ConfirmTransaction");
       } catch (error) {
