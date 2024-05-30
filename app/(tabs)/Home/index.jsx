@@ -93,9 +93,11 @@ const Home = () => {
                       {defaultAccount.account_number}
                     </Text>
                   </View>
-                  <Text className="text-slate-50 font-bold text-base">
-                    {FormatCurrency(defaultAccount.current_balance)} VND
-                  </Text>
+                  {defaultAccount.current_balance && (
+                    <Text className="text-slate-50 font-bold text-base">
+                      {FormatCurrency(defaultAccount.current_balance)} VND
+                    </Text>
+                  )}
                 </View>
               )}
               <View className="flex flex-row justify-between mt-8">
