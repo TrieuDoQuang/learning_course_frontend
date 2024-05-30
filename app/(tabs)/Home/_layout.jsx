@@ -62,7 +62,6 @@ const StackLayout = () => {
         options={{
           headerShown: true,
           headerTitleAlign: "center",
-          headerTitle: "Online Savings",
           headerTitleStyle: { fontSize: 13, color: "#fff" },
           headerTintColor: "#fff",
           headerBackground: () => (
@@ -78,6 +77,7 @@ const StackLayout = () => {
         options={{
           headerShown: true,
           headerTitleAlign: "center",
+          headerTitle: "Online Savings",
           headerTitleStyle: { fontSize: 13, color: "#fff" },
           headerTintColor: "#fff",
           headerBackground: () => (
