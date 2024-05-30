@@ -11,8 +11,58 @@ import { faUser, faChevronDown } from "@fortawesome/free-solid-svg-icons";
 
 import images from "../../../assets";
 import { Category } from "../../../components";
+import { useState, useEffect } from "react";
+import PaymentAccountService from "../../../services/PaymentAccountService";
+import RewardService from "../../../services/RewardService";
+import useAuth from "../../../hooks/useAuth";
 
 const Rewards = () => {
+  const [rewards, setRewards] = useState([]);
+  const [culinaryRewards, setCulinaryRewards] = useState([]);
+  const [entertainmentRewards, setEntertainmentRewards] = useState([]);
+  const [shoppingRewards, setShoppingRewards] = useState([]);
+  const [paymentAccounts, setPaymentAccounts] = useState([]);
+  const { getPaymentAccounts } = PaymentAccountService();
+  const { getAllRewards } = RewardService();
+  const { customerId } = useAuth();
+
+  useEffect(() => {
+    const fetchPaymentAccounts = async () => {
+      try {
+        const response = await getPaymentAccounts(customerId);
+        setPaymentAccounts(response.data.result.paymentAccounts);
+        console.log(response.data.result);
+      } catch (error) {
+        console.error("Failed to fetch payment accounts", error);
+      }
+    };
+
+    const fetchAllRewards = async () => {
+      try {
+        const response = await getAllRewards();
+        setRewards(response.data.result.rewards);
+        console.log(response.data.result);
+        setEntertainmentRewards([]);
+        setCulinaryRewards([]);
+        setShoppingRewards([]);
+        response.data.result.rewards.forEach((reward) => {
+          if (reward.reward_type === "ENTERTAINMENT") {
+            setEntertainmentRewards((oldArray) => [...oldArray, reward]);
+          } else if (reward.reward_type === "CULINARY") {
+            setCulinaryRewards((oldArray) => [...oldArray, reward]);
+          } else if (reward.reward_type === "SHOPPING") {
+            setShoppingRewards((oldArray) => [...oldArray, reward]);
+          }
+        });
+      } catch (error) {
+        console.error("Failed to fetch rewards", error);
+      }
+    };
+
+    fetchPaymentAccounts();
+    fetchAllRewards();
+  }, []);
+
   return (
     <SafeAreaView className="bg-gray-200 h-full">
       <ScrollView>
@@ -39,21 +89,36 @@ const Rewards = () => {
               horizontal={true}
               showsHorizontalScrollIndicator={false}
             >
-              <Category
-                image={images.background}
-                title="Voucher 200,000 VND purchasing at..."
-                price="250"
-              />
-              <Category
-                image={images.background}
-                title="Voucher 200,000 VND purchasing at..."
-                price="250"
-              />
-              <Category
-                image={images.background}
-                title="Voucher 200,000 VND purchasing at..."
-                price="250"
-              />
+              {shoppingRewards &&
+                shoppingRewards.map((reward) => {
+                  return (
+                    <Category
+                      key={reward.id}
+                      image={reward.image_link}
+                      title={reward.reward_name}
+                      price={reward.cost_point}
+                    />
+                  );
+                })}
+            </ScrollView>
+          </View>
+          <View className="my-5">
+            <Text className="text-sm mb-2">Entertainment Voucher</Text>
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+            >
+              {entertainmentRewards &&
+                entertainmentRewards.map((reward) => {
+                  return (
+                    <Category
+                      key={reward.id}
+                      image={reward.image_link}
+                      title={reward.reward_name}
+                      price={reward.cost_point}
+                    />
+                  );
+                })}
             </ScrollView>
           </View>
           <View className="my-5">
@@ -62,21 +127,17 @@ const Rewards = () => {
               horizontal={true}
               showsHorizontalScrollIndicator={false}
             >
-              <Category
-                image={images.background}
-                title="Voucher 200,000 VND purchasing at..."
-                price="250"
-              />
-              <Category
-                image={images.background}
-                title="Voucher 200,000 VND purchasing at..."
-                price="250"
-              />
-              <Category
-                image={images.background}
-                title="Voucher 200,000 VND purchasing at..."
-                price="250"
-              />
+              {culinaryRewards &&
+                culinaryRewards.map((reward) => {
+                  return (
+                    <Category
+                      key={reward.id}
+                      image={reward.image_link}
+                      title={reward.reward_name}
+                      price={reward.cost_point}
+                    />
+                  );
+                })}
             </ScrollView>
           </View>
         </View>
