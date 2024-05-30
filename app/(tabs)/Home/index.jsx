@@ -83,19 +83,21 @@ const Home = () => {
                   </TouchableOpacity>
                 </View>
               </View>
-              <View className="justify-between flex-row mt-4 items-center">
-                <View>
-                  <Text className="text-slate-50 font-bold">
-                    Default Account
-                  </Text>
-                  <Text className="text-slate-50 font-bold">
-                    {defaultAccount.account_number}
+              {defaultAccount && (
+                <View className="justify-between flex-row mt-4 items-center">
+                  <View>
+                    <Text className="text-slate-50 font-bold">
+                      Default Account
+                    </Text>
+                    <Text className="text-slate-50 font-bold">
+                      {defaultAccount.account_number}
+                    </Text>
+                  </View>
+                  <Text className="text-slate-50 font-bold text-base">
+                    {FormatCurrency(defaultAccount.current_balance)} VND
                   </Text>
                 </View>
-                <Text className="text-slate-50 font-bold text-base">
-                  {FormatCurrency(defaultAccount.current_balance)} VND
-                </Text>
-              </View>
+              )}
               <View className="flex flex-row justify-between mt-8">
                 <FeatureItem title="Transfer" icon={faMoneyBillTransfer} />
                 <FeatureItem title="Withdraw" icon={faFileArrowUp} />
