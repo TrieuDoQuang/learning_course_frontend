@@ -52,7 +52,7 @@ const PaymentAccountService = () => {
     }
   };
 
-  const getCustomerNameByAccountNumber = async (accountNumber) => {
+  const getCustomerByAccountNumber = async (accountNumber) => {
     try {
       const response = await axiosPrivate.get(
         `/paymentAccounts/getByAccountNumber/${accountNumber}`
@@ -68,7 +68,7 @@ const PaymentAccountService = () => {
     insertPaymentAccount,
     getPaymentAccounts,
     getDefaultPaymentAccount,
-    getCustomerNameByAccountNumber,
+    getCustomerByAccountNumber,
     getPaymentAccountById,
   };
 };
