@@ -3,12 +3,12 @@ import { useAxiosPrivate } from "../hooks";
 const PaymentAccountService = () => {
   const axiosPrivate = useAxiosPrivate();
 
-  const insertPaymentAccount = async (paymentAccount) => {
+  const insertPaymentAccount = async (customerId, accountNumber) => {
     try {
-      const response = await axiosPrivate.post(
-        "/paymentAccounts",
-        paymentAccount
-      );
+      const response = await axiosPrivate.post("/paymentAccounts", {
+        customer_id: customerId,
+        account_number: accountNumber,
+      });
 
       return response;
     } catch (e) {
@@ -64,12 +64,28 @@ const PaymentAccountService = () => {
     }
   };
 
+  const setPaymentAccountDefault = async (customerId, accountNumber) => {
+    try {
+      const response = await axiosPrivate.post(
+        `/paymentAccounts/setDefaultAccount`,
+        {
+          customer_id: customerId,
+          account_number: accountNumber,
+        }
+      );
+      return response;
+    } catch (e) {
+      console.log("Cannot set Default Payment Account: " + e);
+    }
+  };
+
   return {
     insertPaymentAccount,
     getPaymentAccounts,
     getDefaultPaymentAccount,
     getCustomerByAccountNumber,
     getPaymentAccountById,
+    setPaymentAccountDefault,
   };
 };
 

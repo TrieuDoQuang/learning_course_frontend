@@ -3,11 +3,38 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faFileLines } from "@fortawesome/free-solid-svg-icons";
 import { useState, useEffect } from "react";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
+import CustomerService from "../../../services/CustomerService";
+import { useAuth, useNotification } from "../../../hooks";
+import { Notification } from "../../../components";
+import PaymentAccountService from "../../../services/PaymentAccountService";
 const PaymentAccountDetail = () => {
   const paymentAccount = useLocalSearchParams();
+  const [customerData, setCustomerData] = useState([]);
+  const { getCustomerById } = CustomerService();
+  const { customerId } = useAuth();
+  const { setPaymentAccountDefault } = PaymentAccountService();
+
+  const { notification, showNotification } = useNotification();
   console.log("payment aaa", paymentAccount);
-  useEffect(() => {}, []);
+  useEffect(() => {
+    const fetchDefaultAccount = async () => {
+      const customerResponse = await getCustomerById(customerId);
+      setCustomerData(customerResponse.data.result);
+    };
+    fetchDefaultAccount();
+  }, []);
+
+  const handleSetPaymentAccountDefault = async (customerId, accountNumber) => {
+    try {
+      await setPaymentAccountDefault(customerId, accountNumber);
+      console.log("Set default payment account successfully");
+      showNotification("Set default payment account successfully", "success");
+    } catch (error) {
+      console.error("Failed to set default payment account:", error);
+      showNotification("Failed to set default payment account", "error");
+    }
+  };
 
   return (
     <SafeAreaView>
@@ -18,12 +45,20 @@ const PaymentAccountDetail = () => {
               <View className="flex flex-row items-center gap-2">
                 <FontAwesomeIcon icon={faFileLines} size={30} />
                 <View>
-                  <Text>Do Quang Trieu</Text>
+                  <Text>{customerData.name}</Text>
                   <Text>{paymentAccount.account_number}</Text>
                 </View>
               </View>
               <View classNam="items-center">
-                <TouchableOpacity className="items-center bg-black rounded-md p-3">
+                <TouchableOpacity
+                  className="items-center bg-black rounded-md p-3"
+                  onPress={() =>
+                    handleSetPaymentAccountDefault(
+                      customerId,
+                      paymentAccount.account_number
+                    )
+                  }
+                >
                   <Text className="font-bold  text-slate-50">
                     Set as default
                   </Text>
@@ -47,7 +82,7 @@ const PaymentAccountDetail = () => {
                   <Text>Banking</Text>
                 </View>
                 <View className="gap-3">
-                  <Text className="font-bold">JOHN DOE</Text>
+                  <Text className="font-bold">{customerData.name}</Text>
                   <Text className="font-bold">
                     {paymentAccount.account_number}
                   </Text>

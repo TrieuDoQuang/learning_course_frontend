@@ -16,6 +16,12 @@ const StackLayout = () => {
           headerShown: false,
         }}
       />
+      <Stack.Screen
+        name="InsertPaymentAccount"
+        options={{
+          headerShown: false,
+        }}
+      />
     </Stack>
   );
 };

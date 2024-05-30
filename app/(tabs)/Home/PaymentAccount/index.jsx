@@ -38,9 +38,15 @@ const PaymentAccount = () => {
               <Text className="font-bold">Payment Account</Text>
               <View className="flex-row items-center bg-black rounded-md p-3">
                 <FontAwesomeIcon icon={faPlus} size={18} color="#fff" />
-                <Text className="font-bold ml-2 text-slate-50">
-                  Add Account
-                </Text>
+                <TouchableOpacity
+                  onPress={() =>
+                    router.push("/Home/PaymentAccount/InsertPaymentAccount")
+                  }
+                >
+                  <Text className="font-bold ml-2 text-slate-50">
+                    Add Account
+                  </Text>
+                </TouchableOpacity>
               </View>
             </View>
             {paymentAccounts &&
