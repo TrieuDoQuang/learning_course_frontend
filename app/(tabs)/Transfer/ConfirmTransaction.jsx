@@ -7,12 +7,15 @@ import {
   TouchableOpacity,
 } from "react-native";
 import { useData } from "../../context/DataProvider";
-import TransactionService from "../../services/TransactionService";
+import { TransactionService } from "../../services";
+import { useNotification } from "../../hooks";
+import { Notification } from "../../components";
 
 const ConfirmTransaction = () => {
   const [otp, setOtp] = useState("");
   const { transaction } = useData();
   const { makeTransaction } = TransactionService();
+  const { notification, showNotification } = useNotification();
 
   const handleOtpSubmit = async () => {
     try {
@@ -21,35 +24,66 @@ const ConfirmTransaction = () => {
         otp,
         transactionDTO: transaction,
       });
-      alert("Transaction Completed!");
+      showNotification("Transaction Completed!", "success");
     } catch (error) {
       console.error("Failed to verify OTP or make transaction:", error);
-      alert("Invalid OTP or transaction failed");
+      showNotification("Invalid OTP or transaction failed", "error");
     }
   };
 
   return (
     <SafeAreaView className="bg-gray-200 h-full">
-      <View className="p-3 pt-10">
-        <Text className="text-lg font-bold">Confirm Transaction</Text>
-        <Text>Sender Account: {transaction.sender_account_number}</Text>
-        <Text>Receiver Account: {transaction.receiver_account_number}</Text>
-        <Text>Receiver Name: {transaction.receiver_account_name}</Text>
-        <Text>Amount: {transaction.amount}</Text>
-        <Text>Remark: {transaction.transaction_remark}</Text>
-        <TextInput
-          className="border-2 border-gray-300 p-2 mb-4 rounded-md"
-          placeholder="Enter OTP"
-          keyboardType="numeric"
-          value={otp}
-          onChangeText={setOtp}
-        />
-        <TouchableOpacity
-          className="h-[48px] p-2 border-2 border-gray-300 rounded-2xl justify-center bg-black mb-4"
-          onPress={handleOtpSubmit}
-        >
-          <Text className="text-center text-slate-50 font-bold">Confirm</Text>
-        </TouchableOpacity>
+      {notification.type && (
+        <Notification type={notification.type} message={notification.message} />
+      )}
+      <View className="">
+        <View className="grid gap-4 px-3 pb-6 bg-slate-50 my-2">
+          <View className="flex flex-row justify-between">
+            <Text>Debit Account</Text>
+            <Text>{transaction.sender_account_number}</Text>
+          </View>
+          <View className="flex flex-row justify-between">
+            <Text>Beneficiary Account</Text>
+            <Text>{transaction.receiver_account_number}</Text>
+          </View>
+          <View className="flex flex-row justify-between">
+            <Text>Beneficiary's Name</Text>
+            <Text>{transaction.receiver_account_name}</Text>
+          </View>
+          <View className="flex flex-row justify-between">
+            <Text>Beneficiary Bank</Text>
+            <Text>TDK Banking</Text>
+          </View>
+        </View>
+        <View className="grid gap-4 px-3 pb-6 bg-slate-50 mt-0 mb-2">
+          <View className="flex flex-row justify-between">
+            <Text>Amount</Text>
+            <Text>
+              {transaction.amount.toLocaleString("en-US").replace(/,/g, ".")}{" "}
+              VND
+            </Text>
+          </View>
+          <View className="flex flex-row justify-between">
+            <Text>Transaction Remark</Text>
+            <Text className="w-32 text-right">{transaction.transaction_remark}</Text>
+          </View>
+        </View>
+
+        <View className="grid px-3 pt-6 pb-3 bg-slate-50">
+          <TextInput
+            className="border-2 border-gray-300 p-2 mb-4 rounded-md"
+            placeholder="Enter OTP"
+            keyboardType="numeric"
+            value={otp}
+            onChangeText={setOtp}
+          />
+          <TouchableOpacity
+            className="h-[48px] p-2 border-2 border-gray-300 rounded-2xl justify-center bg-black mb-4"
+            onPress={handleOtpSubmit}
+          >
+            <Text className="text-center text-slate-50 font-bold">Confirm</Text>
+          </TouchableOpacity>
+        </View>
       </View>
     </SafeAreaView>
   );
