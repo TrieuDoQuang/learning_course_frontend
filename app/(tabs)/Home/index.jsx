@@ -24,7 +24,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import images from "../../assets";
 import { FeatureItem, TransactionItem } from "../../components";
-
+import { FormatCurrency } from "../../components";
 const Home = () => {
   const [customerData, setCustomerData] = useState([]);
   const [defaultAccount, setDefaultAccount] = useState([]);
@@ -93,10 +93,7 @@ const Home = () => {
                   </Text>
                 </View>
                 <Text className="text-slate-50 font-bold text-base">
-                  {defaultAccount.current_balance
-                    .toLocaleString("en-US")
-                    .replace(/,/g, ".")}{" "}
-                  VND
+                  {FormatCurrency(defaultAccount.current_balance)} VND
                 </Text>
               </View>
               <View className="flex flex-row justify-between mt-8">

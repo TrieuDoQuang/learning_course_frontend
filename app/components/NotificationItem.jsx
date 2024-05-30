@@ -8,6 +8,7 @@ import {
 import { PaymentAccountService } from "../services";
 import { useFocusEffect } from "@react-navigation/native";
 import { useAuth } from "../hooks";
+import FormatCurrency from "./FormatCurrency";
 
 const NotificationItem = ({
   timeString,
@@ -66,11 +67,11 @@ const NotificationItem = ({
             Transaction Amount:{" "}
             {defaultAccountNumber === currentAccount ? (
               <Text className="font-bold text-red-500">
-                -{amount.toLocaleString("en-US").replace(/,/g, ".")} VND
+                -{FormatCurrency(amount)} VND
               </Text>
             ) : (
               <Text className="font-bold text-green-500">
-                +{amount.toLocaleString("en-US").replace(/,/g, ".")} VND
+                +{FormatCurrency(amount)} VND
               </Text>
             )}
           </Text>

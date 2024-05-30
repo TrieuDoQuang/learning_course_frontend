@@ -5,6 +5,7 @@ import InputItem from "./InputItem";
 import NotificationItem from "./NotificationItem";
 import Notification from "./Notification";
 import Category from "./Category";
+import FormatCurrency from "./FormatCurrency";
 
 export {
   TransactionItem,
@@ -14,4 +15,5 @@ export {
   NotificationItem,
   Notification,
   Category,
+  FormatCurrency
 };

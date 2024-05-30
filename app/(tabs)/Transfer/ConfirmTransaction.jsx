@@ -10,6 +10,7 @@ import { useData } from "../../context/DataProvider";
 import { TransactionService } from "../../services";
 import { useNotification } from "../../hooks";
 import { Notification } from "../../components";
+import { FormatCurrency } from "../../components";
 
 const ConfirmTransaction = () => {
   const [otp, setOtp] = useState("");
@@ -63,10 +64,7 @@ const ConfirmTransaction = () => {
         <View className="grid gap-4 px-3 pb-6 bg-slate-50 mt-0 mb-2">
           <View className="flex flex-row justify-between">
             <Text>Amount</Text>
-            <Text>
-              {transaction.amount.toLocaleString("en-US").replace(/,/g, ".")}{" "}
-              VND
-            </Text>
+            <Text>{FormatCurrency(transaction.amount)} VND</Text>
           </View>
           <View className="flex flex-row justify-between">
             <Text>Transaction Remark</Text>
