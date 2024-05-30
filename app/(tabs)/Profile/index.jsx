@@ -18,12 +18,34 @@ import images from "../../assets";
 import { ProfileItem } from "../../components";
 import { AuthContext } from "../../context/AuthContext";
 import { useContext } from "react";
+import { useAuth } from "../../hooks";
+import { useState, useEffect } from "react";
+import { CustomerService } from "../../services";
+
 const Profile = () => {
+  const [customerData, setCustomerData] = useState([]);
+  const { getCustomerById } = CustomerService();
+  const { customerId } = useAuth();
   const authContext = useContext(AuthContext);
+
+  useEffect(() => {
+    const fetchCustomer = async () => {
+      try {
+        const response = await getCustomerById(customerId);
+        setCustomerData(response.data.result);
+      } catch (error) {
+        console.error("Failed to fetch customer data:", error);
+      }
+    };
+
+    fetchCustomer();
+  }, [customerId]);
+
   const handleLogout = () => {
     authContext.logout();
     router.replace("/Login");
   };
+
   return (
     <SafeAreaView className="h-full bg-gray-200">
       <ScrollView>
@@ -38,7 +60,7 @@ const Profile = () => {
                   <View className="p-6 flex gap-3">
                     <View className="flex flex-row justify-between items-center">
                       <Text className="text-slate-50 font-bold text-xl">
-                        Do Quang Trieu
+                        {customerData?.name}
                       </Text>
                       <Text className="text-slate-50 uppercase italic">
                         {" "}
@@ -53,7 +75,7 @@ const Profile = () => {
                       />
                     </View>
                     <View className="flex flex-row">
-                      <Text className="text-slate-50 font-bold text-sm">
+                      <Text className="text-slate-50 mr-10 font-bold text-sm">
                         35-070-0003-3256-2022
                       </Text>
                       <TouchableOpacity className="flex flex-row pl-2 gap-1">

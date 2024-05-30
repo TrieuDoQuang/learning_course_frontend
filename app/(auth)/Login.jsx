@@ -26,14 +26,14 @@ const Login = () => {
     });
   };
 
-  console.log(loginData);
+  // console.log(loginData);
 
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
       const response = await login(loginData);
-      console.log(response.data.result.token);
-      console.log(response.data.result.refresh_token);
+      // console.log(response.data.result.token);
+      // console.log(response.data.result.refresh_token);
       await authContext.authenticate(
         response.data.result.token,
         response.data.result.refresh_token
