@@ -1,4 +1,3 @@
-// Transfer.js
 import React, { useState, useEffect } from "react";
 import {
   View,
@@ -13,8 +12,11 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import InputItem from "../../components/InputItem";
 import { useNavigation } from "@react-navigation/native";
-import CustomerService from "../../services/CustomerService";
-import PaymentAccountService from "../../services/PaymentAccountService";
+import {
+  CustomerService,
+  TransactionService,
+  PaymentAccountService,
+} from "../../services";
 import { TransactionData, PaymentAccountData, CustomerData } from "../../data";
 import { useAuth } from "../../hooks";
 import { useData } from "../../context/DataProvider";
@@ -24,16 +26,15 @@ const Transfer = () => {
   const [pin, setPin] = useState("");
 
   const [sender, setSender] = useState(CustomerData);
+
   const [defaultPaymentAccount, setDefaultPaymentAccount] =
     useState(PaymentAccountData);
-  const [transaction, setTransaction] = useState({
-    ...TransactionData,
-    transaction_remark: "",
-  });
+  const [transaction, setTransaction] = useState(TransactionData);
 
   const { getCustomerById } = CustomerService();
-  const { getCustomerNameByAccountNumber, getDefaultPaymentAccount } =
+  const { getCustomerByAccountNumber, getDefaultPaymentAccount } =
     PaymentAccountService();
+  const { sendOtp } = TransactionService();
   const { customerId } = useAuth();
   const { setTransaction: setTransactionContext } = useData();
   const navigation = useNavigation();
@@ -42,12 +43,13 @@ const Transfer = () => {
     const fetchReceiverName = async () => {
       if (transaction.receiver_account_number.length === 10) {
         try {
-          const response = await getCustomerNameByAccountNumber(
+          const response = await getCustomerByAccountNumber(
             transaction.receiver_account_number
           );
+
           setTransaction((prevTransaction) => ({
             ...prevTransaction,
-            receiver_account_name: response.data.result,
+            receiver_account_name: response.data.result.name,
           }));
         } catch (error) {
           console.error("Failed to fetch customer name:", error);
@@ -66,6 +68,7 @@ const Transfer = () => {
         setSender(senderData);
         setTransaction((prevTransaction) => ({
           ...prevTransaction,
+          sender_email: senderData.email,
           transaction_remark: senderData.name + " Chuyen tien",
         }));
       } catch (error) {
@@ -109,10 +112,15 @@ const Transfer = () => {
     const existingPinNumber = response.data.result.pin_number;
 
     if (String(existingPinNumber) === pin) {
-      setTransactionContext(transaction);
-      navigation.navigate("ConfirmTransaction");
+      try {
+        await sendOtp({ receiver_email: sender.email });
+        setTransactionContext(transaction);
+        navigation.navigate("ConfirmTransaction");
+      } catch (error) {
+        console.error("Failed to send OTP:", error);
+      }
     } else {
-      // Set notification for wrong PIN
+      alert("Invalid PIN");
     }
 
     setModalVisible(false);
@@ -165,7 +173,7 @@ const Transfer = () => {
                 />
                 <InputItem
                   title="Amount"
-                  value={transaction.amount}
+                  value={+transaction.amount}
                   onChangeText={(value) => handleInputChange("amount", value)}
                 />
                 <InputItem
