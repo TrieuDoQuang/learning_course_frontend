@@ -1,12 +1,14 @@
 import { View, Image, Text } from "react-native";
 import images from "../assets";
 
-const Category = ({image, title, price}) => {
+const Category = ({ image, title, price }) => {
   return (
     <View className="w-[136px] border-[1.4px] rounded-md shadow-2xl mr-4">
       <View className="h-36">
         <Image
-          source={image}
+          source={{
+            uri: image,
+          }}
           style={{
             width: "100%",
             height: "100%",
@@ -17,9 +19,7 @@ const Category = ({image, title, price}) => {
         />
       </View>
       <View className="p-1">
-        <Text className="mb-2 text-[12px] font-semibold">
-          {title}
-        </Text>
+        <Text className="mb-2 text-[12px] font-semibold">{title}</Text>
         <View className="flex-row items-center">
           <Image source={images.pricetag} />
           <Text className="ml-1 text-[11px] font-bold text-blue-400">
