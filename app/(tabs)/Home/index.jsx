@@ -1,4 +1,7 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useCallback } from "react";
+import { PaymentAccountService, CustomerService } from "../../services";
+import { useFocusEffect } from "@react-navigation/native";
+import { useAuth } from "../../hooks";
 import {
   View,
   Text,
@@ -23,8 +26,30 @@ import images from "../../assets";
 import { FeatureItem, TransactionItem } from "../../components";
 
 const Home = () => {
+  const [customerData, setCustomerData] = useState([]);
+  const [defaultAccount, setDefaultAccount] = useState([]);
+  const { getDefaultPaymentAccount } = PaymentAccountService();
+  const { getCustomerById } = CustomerService();
+  const { customerId } = useAuth();
   const [selectedButton, setSelectedButton] = useState("All");
   const [showMoreContent, setShowMoreContent] = useState(false);
+
+  useFocusEffect(
+    useCallback(() => {
+      const fetchDefaultAccount = async () => {
+        try {
+          const response = await getDefaultPaymentAccount(customerId);
+          const customerResponse = await getCustomerById(customerId);
+          setCustomerData(customerResponse.data.result);
+          setDefaultAccount(response.data.result);
+        } catch (error) {
+          console.error("Failed to fetch transactions:", error);
+        }
+      };
+
+      fetchDefaultAccount();
+    }, [customerId])
+  );
 
   const buttons = ["All", "Transfer", "Withdraw", "Top up", "More"];
 
@@ -41,13 +66,13 @@ const Home = () => {
                 <FontAwesomeIcon icon={faUser} size={30} color="orange" />
                 <View className="">
                   <Text className="text-slate-50 font-bold text-[17px]">
-                    Chau Hoang Gia Dat
+                    {customerData.name}
                   </Text>
                   <TouchableOpacity>
                     <Link href="Home/PaymentAccount">
                       <View className="items-center flex flex-row">
                         <Text className="mr-2 text-gray-400 text-md">
-                          Payment Account
+                          Payment Accounts
                         </Text>
                         <FontAwesomeIcon
                           icon={faAngleRight}
@@ -58,9 +83,21 @@ const Home = () => {
                   </TouchableOpacity>
                 </View>
               </View>
-              <View className="justify-between flex-row mt-4">
-                <Text className="text-slate-50 font-bold">Current Balance</Text>
-                <Text className="text-slate-50 font-bold">2.000.000 VND</Text>
+              <View className="justify-between flex-row mt-4 items-center">
+                <View>
+                  <Text className="text-slate-50 font-bold">
+                    Default Account
+                  </Text>
+                  <Text className="text-slate-50 font-bold">
+                    {defaultAccount.account_number}
+                  </Text>
+                </View>
+                <Text className="text-slate-50 font-bold text-base">
+                  {defaultAccount.current_balance
+                    .toLocaleString("en-US")
+                    .replace(/,/g, ".")}{" "}
+                  VND
+                </Text>
               </View>
               <View className="flex flex-row justify-between mt-8">
                 <FeatureItem title="Transfer" icon={faMoneyBillTransfer} />
@@ -123,24 +160,6 @@ const Home = () => {
               </TouchableOpacity>
             </View>
             <View className="px-11 mt-4">
-              <TransactionItem
-                image={images.avatar}
-                name="Do Quang Trieu"
-                date="14 May 2024"
-                amount="200.000"
-              />
-              <TransactionItem
-                image={images.avatar}
-                name="Do Quang Trieu"
-                date="14 May 2024"
-                amount="200.000"
-              />
-              <TransactionItem
-                image={images.avatar}
-                name="Do Quang Trieu"
-                date="14 May 2024"
-                amount="200.000"
-              />
               <TransactionItem
                 image={images.avatar}
                 name="Do Quang Trieu"

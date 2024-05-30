@@ -3,6 +3,24 @@ import { useAxiosPrivate } from "../hooks";
 const TransactionService = () => {
   const axiosPrivate = useAxiosPrivate();
 
+  const getAllTransactionsByCustomerId = async (customerId) => {
+    try {
+      const response = await axiosPrivate.get(
+        `/transactions/getByCustomerId/${customerId}`
+      );
+
+      return response.data;
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        throw new Error("Cannot find Transactions History");
+      } else {
+        throw new Error(
+          error.response.data || error.message || "Unknown error occurred"
+        );
+      }
+    }
+  };
+
   const sendOtp = async (otpRequest) => {
     try {
       const response = await axiosPrivate.post(
@@ -33,10 +51,8 @@ const TransactionService = () => {
       }
     } catch (error) {
       if (error.response && error.response.status === 400) {
-        // Invalid OTP
         throw new Error("Invalid OTP");
       } else {
-        // Other errors
         throw new Error(
           error.response.data || error.message || "Unknown error occurred"
         );
@@ -46,6 +62,7 @@ const TransactionService = () => {
 
   return {
     sendOtp,
+    getAllTransactionsByCustomerId,
     makeTransaction,
   };
 };
