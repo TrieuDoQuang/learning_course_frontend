@@ -24,19 +24,24 @@ const ConfirmTransaction = () => {
         otp,
         transactionDTO: transaction,
       });
+
       showNotification("Transaction Completed!", "success");
     } catch (error) {
-      console.error("Failed to verify OTP or make transaction:", error);
-      showNotification("Invalid OTP or transaction failed", "error");
+      showNotification(error.message, "error");
     }
   };
 
   return (
     <SafeAreaView className="bg-gray-200 h-full">
-      {notification.type && (
-        <Notification type={notification.type} message={notification.message} />
-      )}
       <View className="">
+        <View className="absolute top-[-60px] self-center">
+          {notification.type && (
+            <Notification
+              type={notification.type}
+              message={notification.message}
+            />
+          )}
+        </View>
         <View className="grid gap-4 px-3 pb-6 bg-slate-50 my-2">
           <View className="flex flex-row justify-between">
             <Text>Debit Account</Text>
@@ -65,7 +70,9 @@ const ConfirmTransaction = () => {
           </View>
           <View className="flex flex-row justify-between">
             <Text>Transaction Remark</Text>
-            <Text className="w-32 text-right">{transaction.transaction_remark}</Text>
+            <Text className="w-32 text-right">
+              {transaction.transaction_remark}
+            </Text>
           </View>
         </View>
 

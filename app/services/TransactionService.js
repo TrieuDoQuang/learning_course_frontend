@@ -23,9 +23,24 @@ const TransactionService = () => {
         otpVerificationRequest
       );
 
-      return response;
-    } catch (e) {
-      console.log("Error: " + e);
+      // Check if response is successful
+      if (response.status === 200) {
+        // Transaction completed successfully
+        return response.data;
+      } else {
+        // Some other error occurred
+        throw new Error(response.data || "Unknown error occurred");
+      }
+    } catch (error) {
+      if (error.response && error.response.status === 400) {
+        // Invalid OTP
+        throw new Error("Invalid OTP");
+      } else {
+        // Other errors
+        throw new Error(
+          error.response.data || error.message || "Unknown error occurred"
+        );
+      }
     }
   };
 
