@@ -22,6 +22,8 @@ const Rewards = () => {
   const [entertainmentRewards, setEntertainmentRewards] = useState([]);
   const [shoppingRewards, setShoppingRewards] = useState([]);
   const [paymentAccounts, setPaymentAccounts] = useState([]);
+  const [selectedPaymentAccount, setSelectedPaymentAccount] = useState();
+  const [modalVisible, setModalVisible] = useState(false);
   const { getPaymentAccounts } = PaymentAccountService();
   const { getAllRewards } = RewardService();
   const { customerId } = useAuth();
@@ -31,7 +33,10 @@ const Rewards = () => {
       try {
         const response = await getPaymentAccounts(customerId);
         setPaymentAccounts(response.data.result.paymentAccounts);
-        console.log(response.data.result);
+        if (response.data.result.paymentAccounts.length > 0)
+          setSelectedPaymentAccount(response.data.result.paymentAccounts[0]);
+        //console.log(response.data.result);
+        console.log(response.data.result.paymentAccounts[0]);
       } catch (error) {
         console.error("Failed to fetch payment accounts", error);
       }
@@ -41,7 +46,7 @@ const Rewards = () => {
       try {
         const response = await getAllRewards();
         setRewards(response.data.result.rewards);
-        console.log(response.data.result);
+        //console.log(response.data.result);
         setEntertainmentRewards([]);
         setCulinaryRewards([]);
         setShoppingRewards([]);
@@ -67,22 +72,27 @@ const Rewards = () => {
     <SafeAreaView className="bg-gray-200 h-full">
       <ScrollView>
         <View className="p-3 pt-5">
-          <View className="">
-            <View className="bg-slate-50 rounded-md">
-              <View className="flex-row p-[9px] items-center">
-                <FontAwesomeIcon icon={faUser} color="orange" size={25} />
-                <View className="ml-4 mr-12">
-                  <Text>032299999 - Chau Hoang Gia Dat</Text>
-                  <Text className="text-lg font-bold">
-                    Reward Points: 150 RWP
-                  </Text>
+          {selectedPaymentAccount && (
+            <View className="">
+              <View className="bg-slate-50 rounded-md">
+                <View className="flex-row p-[9px] items-center">
+                  <FontAwesomeIcon icon={faUser} color="orange" size={25} />
+                  <View className="ml-4 mr-12">
+                    <Text>
+                      Payment Account - {selectedPaymentAccount.account_number}
+                    </Text>
+                    <Text className="text-lg font-bold">
+                      Reward Points: {selectedPaymentAccount.reward_point} RWP
+                    </Text>
+                  </View>
+                  <TouchableOpacity onPress={() => setModalVisible(true)}>
+                    <FontAwesomeIcon icon={faChevronDown} color="#3C84AB" />
+                  </TouchableOpacity>
                 </View>
-                <TouchableOpacity>
-                  <FontAwesomeIcon icon={faChevronDown} color="#3C84AB" />
-                </TouchableOpacity>
               </View>
             </View>
-          </View>
+          )}
+
           <View className="my-5">
             <Text className="text-sm mb-2">Shopping Voucher</Text>
             <ScrollView

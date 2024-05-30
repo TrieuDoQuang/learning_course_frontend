@@ -1,7 +1,7 @@
 import { View, Image, Text } from "react-native";
 import images from "../assets";
 
-const Category = ({ key, image, title, price }) => {
+const Category = ({ image, title, price }) => {
   return (
     <View className="w-[136px] border-[1.4px] rounded-md shadow-2xl mr-4">
       <View className="h-36">
