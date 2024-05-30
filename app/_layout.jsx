@@ -5,7 +5,7 @@ import AuthContextProvider, { AuthContext } from "./context/AuthContext";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { ActivityIndicator, View, Text } from "react-native"; // Import Text from react-native
 import * as TokenUtil from "./utils/TokenUtil";
-
+import { DataProvider } from "./context/DataProvider";
 export const unstable_settings = {
   initialRouteName: "(tabs)",
 };
@@ -76,7 +76,9 @@ function RootLayout() {
 export default function App() {
   return (
     <AuthContextProvider>
-      <RootLayout />
+      <DataProvider>
+        <RootLayout />
+      </DataProvider>
     </AuthContextProvider>
   );
 }

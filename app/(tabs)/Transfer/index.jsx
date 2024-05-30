@@ -20,24 +20,24 @@ import {
 import { TransactionData, PaymentAccountData, CustomerData } from "../../data";
 import { useAuth } from "../../hooks";
 import { useData } from "../../context/DataProvider";
+import { Notification } from "../../components";
+import { useNotification } from "../../hooks";
 
 const Transfer = () => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [pin, setPin] = useState("");
-
   const [sender, setSender] = useState(CustomerData);
-
   const [defaultPaymentAccount, setDefaultPaymentAccount] =
     useState(PaymentAccountData);
   const [transaction, setTransaction] = useState(TransactionData);
-
   const { getCustomerById } = CustomerService();
   const { getCustomerByAccountNumber, getDefaultPaymentAccount } =
     PaymentAccountService();
   const { sendOtp } = TransactionService();
   const { customerId } = useAuth();
-  const { setTransaction: setTransactionContext } = useData();
   const navigation = useNavigation();
+  const { setTransaction: setTransactionContext } = useData();
+  const { notification, showNotification } = useNotification();
 
   useEffect(() => {
     const fetchReceiverName = async () => {
@@ -92,7 +92,7 @@ const Transfer = () => {
 
     fetchDefaultPaymentAccount();
     fetchSenderData();
-  }, []);
+  }, [customerId]);
 
   const handleConfirmTransaction = () => {
     if (
@@ -103,7 +103,10 @@ const Transfer = () => {
     ) {
       setModalVisible(true);
     } else {
-      alert("Please fill in all fields before confirming the transaction.");
+      showNotification(
+        "Please fill in all fields before confirming the transaction",
+        "error"
+      );
     }
   };
 
@@ -115,15 +118,23 @@ const Transfer = () => {
       try {
         await sendOtp({ receiver_email: sender.email });
         setTransactionContext(transaction);
+        setTransaction({
+          ...transaction,
+          amount: 0,
+          receiver_account_number: "",
+          receiver_account_name: "",
+        });
         navigation.navigate("ConfirmTransaction");
       } catch (error) {
         console.error("Failed to send OTP:", error);
       }
     } else {
-      alert("Invalid PIN");
+      showNotification("Invalid PIN", "error");
     }
 
     setModalVisible(false);
+
+    setPin("");
   };
 
   const handleInputChange = (field, value) => {
@@ -137,6 +148,12 @@ const Transfer = () => {
     <SafeAreaView className="bg-gray-200 h-full">
       <ScrollView>
         <View className="p-3 pt-10">
+          {notification.type && (
+            <Notification
+              type={notification.type}
+              message={notification.message}
+            />
+          )}
           <View className="h-[120px]">
             <Text className="text-sm mb-2">Source Payment Account</Text>
             <View className="bg-slate-50 rounded-md">
@@ -173,7 +190,7 @@ const Transfer = () => {
                 />
                 <InputItem
                   title="Amount"
-                  value={+transaction.amount}
+                  value={transaction.amount}
                   onChangeText={(value) => handleInputChange("amount", value)}
                 />
                 <InputItem
