@@ -16,17 +16,15 @@ import {
   faFileArrowUp,
   faWallet,
   faGift,
+  faBars,
+  faPiggyBank,
 } from "@fortawesome/free-solid-svg-icons";
 import images from "../../assets";
 import { FeatureItem, TransactionItem } from "../../components";
 
 const Home = () => {
-  // const [paymentAccount, setPaymentAccount] = useState({
-  //   name: "Chau Hoang Gia Dat",
-  //   balance: "2.000.000 VND",
-  // });
-
   const [selectedButton, setSelectedButton] = useState("All");
+  const [showMoreContent, setShowMoreContent] = useState(false);
 
   const buttons = ["All", "Transfer", "Withdraw", "Top up", "More"];
 
@@ -68,8 +66,27 @@ const Home = () => {
                 <FeatureItem title="Transfer" icon={faMoneyBillTransfer} />
                 <FeatureItem title="Withdraw" icon={faFileArrowUp} />
                 <FeatureItem title="TopUp" icon={faWallet} />
-                <FeatureItem title="Rewards" icon={faGift} />
+                <View className="items-center">
+                  <TouchableOpacity
+                    className="h-[40px] w-[40px] bg-slate-50 items-center justify-center rounded-sm"
+                    onPress={() => setShowMoreContent(!showMoreContent)}
+                  >
+                    <FontAwesomeIcon icon={faBars} size={25} color="#2B2DE2" />
+                  </TouchableOpacity>
+                  <Text className="text-slate-50 mt-2">More</Text>
+                </View>
               </View>
+              {showMoreContent && (
+                <ImageBackground
+                  source={images.bglinear}
+                  resizeMode="cover"
+                  borderRadius={6}
+                  className="bg-gray-400 p-4 flex flex-row self-end rounded-md"
+                >
+                  <FeatureItem className="mr-5" title="Rewards" icon={faGift} />
+                  <FeatureItem title="Savings" icon={faPiggyBank} />
+                </ImageBackground>
+              )}
             </View>
           </ImageBackground>
           <View className="h-[100px] bg-white justify-center items-center">

@@ -6,9 +6,9 @@ import {
 import { Link } from "expo-router";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
-const FeatureItem = ({ title, icon }) => {
+const FeatureItem = ({ title, icon, className }) => {
   return (
-    <View className="items-center">
+    <View className={`${className} items-center`}>
       <View className="bg-slate-50 rounded-[3px]">
         <TouchableOpacity className="h-[40px] w-[40px] bg-white items-center justify-center rounded-sm">
           <Link

@@ -62,6 +62,22 @@ const StackLayout = () => {
         options={{
           headerShown: true,
           headerTitleAlign: "center",
+          headerTitle: "Online Savings",
+          headerTitleStyle: { fontSize: 13, color: "#fff" },
+          headerTintColor: "#fff",
+          headerBackground: () => (
+            <ImageBackground
+              source={images.bglinear}
+              style={{ width: "100%", height: "100%" }}
+            />
+          ),
+        }}
+      />
+      <Stack.Screen
+        name="Savings"
+        options={{
+          headerShown: true,
+          headerTitleAlign: "center",
           headerTitleStyle: { fontSize: 13, color: "#fff" },
           headerTintColor: "#fff",
           headerBackground: () => (
