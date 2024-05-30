@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import {
   View,
   Text,
@@ -11,7 +11,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import InputItem from "../../components/InputItem";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useFocusEffect } from "@react-navigation/native";
 import {
   CustomerService,
   TransactionService,
@@ -60,39 +60,41 @@ const Transfer = () => {
     fetchReceiverName();
   }, [transaction.receiver_account_number]);
 
-  useEffect(() => {
-    const fetchSenderData = async () => {
-      try {
-        const response = await getCustomerById(customerId);
-        const senderData = response.data.result;
-        setSender(senderData);
-        setTransaction((prevTransaction) => ({
-          ...prevTransaction,
-          sender_email: senderData.email,
-          transaction_remark: senderData.name + " Chuyen tien",
-        }));
-      } catch (error) {
-        console.error("Failed to fetch sender data:", error);
-      }
-    };
+  useFocusEffect(
+    useCallback(() => {
+      const fetchSenderData = async () => {
+        try {
+          const response = await getCustomerById(customerId);
+          const senderData = response.data.result;
+          setSender(senderData);
+          setTransaction((prevTransaction) => ({
+            ...prevTransaction,
+            sender_email: senderData.email,
+            transaction_remark: senderData.name + " Chuyen tien",
+          }));
+        } catch (error) {
+          console.error("Failed to fetch sender data:", error);
+        }
+      };
 
-    const fetchDefaultPaymentAccount = async () => {
-      try {
-        const response = await getDefaultPaymentAccount(customerId);
-        const defaultAccount = response.data.result;
-        setDefaultPaymentAccount(defaultAccount);
-        setTransaction((prevTransaction) => ({
-          ...prevTransaction,
-          sender_account_number: defaultAccount.account_number,
-        }));
-      } catch (error) {
-        console.error("Failed to fetch default payment account:", error);
-      }
-    };
+      const fetchDefaultPaymentAccount = async () => {
+        try {
+          const response = await getDefaultPaymentAccount(customerId);
+          const defaultAccount = response.data.result;
+          setDefaultPaymentAccount(defaultAccount);
+          setTransaction((prevTransaction) => ({
+            ...prevTransaction,
+            sender_account_number: defaultAccount.account_number,
+          }));
+        } catch (error) {
+          console.error("Failed to fetch default payment account:", error);
+        }
+      };
 
-    fetchDefaultPaymentAccount();
-    fetchSenderData();
-  }, [customerId]);
+      fetchDefaultPaymentAccount();
+      fetchSenderData();
+    }, [customerId])
+  );
 
   const handleConfirmTransaction = () => {
     if (
@@ -133,7 +135,6 @@ const Transfer = () => {
     }
 
     setModalVisible(false);
-
     setPin("");
   };
 
