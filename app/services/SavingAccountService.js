@@ -42,10 +42,22 @@ const SavingAccountService = () => {
     }
   };
 
+  const withdrawSavingAccount = async (savingAccountId) => {
+    try {
+      const response = await axiosPrivate.put(
+        `/savingAccounts/withdraw/${savingAccountId}`
+      );
+      return response;
+    } catch (e) {
+      console.log("Cannot withdraw saving account: " + e);
+    }
+  };
+
   return {
     getUserSavingAccounts,
     getAllInterestRates,
     insertSavingAccount,
+    withdrawSavingAccount,
   };
 };
 
