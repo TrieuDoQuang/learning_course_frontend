@@ -104,7 +104,7 @@ const Notification = () => {
               </View>
             ))
           ) : (
-            <View className="text-center">
+            <View className="text-center mx-[50%] my-[50%]">
               <Text>No transactions found</Text>
             </View>
           )}

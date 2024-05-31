@@ -6,9 +6,9 @@ import NotificationItem from "./NotificationItem";
 import BeneficiaryItem from "./BeneficiaryItem";
 import Notification from "./Notification";
 import Category from "./Category";
-import FormatCurrency from "./FormatCurrency";
+import FormatCurrency, { formatCurrency } from "./FormatCurrency";
 import InputModal from "./InputModal";
-
+import PaymentAccountItem from "./PaymentAccountItem";
 export {
   TransactionItem,
   ProfileItem,
@@ -19,5 +19,7 @@ export {
   Category,
   BeneficiaryItem,
   FormatCurrency,
-  InputModal
+  InputModal,
+  PaymentAccountItem,
+  formatCurrency,
 };

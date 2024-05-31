@@ -33,7 +33,6 @@ const PaymentAccountService = () => {
       const response = await axiosPrivate.get(
         `/paymentAccounts/${paymentAccountId}`
       );
-
       return response;
     } catch (e) {
       console.log("Cannot get Payment Accounts: " + e);
@@ -79,6 +78,38 @@ const PaymentAccountService = () => {
     }
   };
 
+  const topUpPaymentAccount = async (paymentAccountId, amount) => {
+    try {
+      const response = await axiosPrivate.put(
+        `/paymentAccounts/topUpPaymentAccount/${paymentAccountId}`,
+        {
+          amount: amount,
+        }
+      );
+      console.log(response);
+
+      return response;
+    } catch (e) {
+      console.log("Cannot top up: " + e);
+      return e.response;
+    }
+  };
+
+  const withdrawPaymentAccount = async (paymentAccountId, amount) => {
+    try {
+      const response = await axiosPrivate.put(
+        `/paymentAccounts/withdrawPaymentAccount/${paymentAccountId}`,
+        {
+          amount: amount,
+        }
+      );
+      return response;
+    } catch (e) {
+      console.log("Cannot withdraw: " + e);
+      return e.response;
+    }
+  };
+
   return {
     insertPaymentAccount,
     getPaymentAccounts,
@@ -86,6 +117,8 @@ const PaymentAccountService = () => {
     getCustomerByAccountNumber,
     getPaymentAccountById,
     setPaymentAccountDefault,
+    topUpPaymentAccount,
+    withdrawPaymentAccount,
   };
 };
 
