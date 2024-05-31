@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "learning_course_frontend",
-    "slug": "learning_course_frontend",
-    "scheme": "learning_course_frontend",
+    "name": "online_banking_frontend",
+    "slug": "online_banking_frontend",
+    "scheme": "online_banking_frontend",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./app/assets/icon.png",
