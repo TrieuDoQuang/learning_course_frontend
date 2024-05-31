@@ -30,6 +30,12 @@ module.exports = {
         information: {
           DEFAULT: "#405AB5",
         },
+        blue: {
+          DEFAULT: "#ADD8E6",
+          100: "#ADD8E6",
+          200: "#8AC7DB",
+          300: "#67B7D1",
+        },
       },
       fontFamily: {
         pthin: ["Poppins-Thin", "sans-serif"],
