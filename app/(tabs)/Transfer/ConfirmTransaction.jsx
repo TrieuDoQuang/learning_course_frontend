@@ -17,7 +17,6 @@ const ConfirmTransaction = () => {
   const { transaction } = useData();
   const { makeTransaction } = TransactionService();
   const { notification, showNotification } = useNotification();
-
   const handleOtpSubmit = async () => {
     try {
       await makeTransaction({

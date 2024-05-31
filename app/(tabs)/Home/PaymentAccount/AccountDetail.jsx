@@ -39,6 +39,14 @@ const PaymentAccountDetail = () => {
   return (
     <SafeAreaView>
       <ScrollView>
+        <View className="absolute top-[-60px] self-center">
+          {notification.type && (
+            <Notification
+              type={notification.type}
+              message={notification.message}
+            />
+          )}
+        </View>
         <View className="px-3 my-2 gap-10">
           <View>
             <View className="flex flex-row justify-between">
@@ -99,10 +107,10 @@ const PaymentAccountDetail = () => {
                     {paymentAccount.date_closed}
                   </Text>
                   <Text className="font-bold">
-                    {paymentAccount.current_balance}
+                    {paymentAccount.current_balance || 0}
                   </Text>
                   <Text className="font-bold">
-                    {paymentAccount.reward_point}
+                    {paymentAccount.reward_point || 0}
                   </Text>
                   <Text className="font-bold">TDK BANKING</Text>
                 </View>
