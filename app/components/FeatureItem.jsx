@@ -1,8 +1,4 @@
-import {
-  View,
-  Text,
-  TouchableOpacity,
-} from "react-native";
+import { View, Text, TouchableOpacity } from "react-native";
 import { Link } from "expo-router";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
