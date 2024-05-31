@@ -11,7 +11,11 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import InputItem from "../../components/InputItem";
-import { useNavigation, useFocusEffect, useRoute } from "@react-navigation/native";
+import {
+  useNavigation,
+  useFocusEffect,
+  useRoute,
+} from "@react-navigation/native";
 import {
   CustomerService,
   TransactionService,
@@ -114,7 +118,11 @@ const Transfer = () => {
       transaction.amount &&
       transaction.transaction_remark
     ) {
-      setModalVisible(true);
+      if (transaction.amount > defaultPaymentAccount.current_balance) {
+        showNotification("Transfer amount must not be larger than current balance", "error");
+      } else {
+        setModalVisible(true);
+      }
     } else {
       showNotification(
         "Please fill in all fields before confirming the transaction",

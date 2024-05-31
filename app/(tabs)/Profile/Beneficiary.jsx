@@ -70,7 +70,8 @@ const Beneficiary = () => {
       setFormBeneficiary({ account_number: "", name: "" });
       setIsInputModalVisible(false);
     } catch (error) {
-      console.error("Failed to insert beneficiary:", error);
+      setIsInputModalVisible(false);
+      showNotification(error.message, "error"); // Show the backend error message
     }
   };
 
