@@ -11,7 +11,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import InputItem from "../../components/InputItem";
-import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import { useNavigation, useFocusEffect, useRoute } from "@react-navigation/native";
 import {
   CustomerService,
   TransactionService,
@@ -36,8 +36,19 @@ const Transfer = () => {
   const { sendOtp } = TransactionService();
   const { customerId } = useAuth();
   const navigation = useNavigation();
+  const route = useRoute();
   const { setTransaction: setTransactionContext } = useData();
   const { notification, showNotification } = useNotification();
+
+  // Set the receiver's account number from the route params
+  useEffect(() => {
+    if (route.params?.accountNumber) {
+      setTransaction((prevTransaction) => ({
+        ...prevTransaction,
+        receiver_account_number: route.params.accountNumber,
+      }));
+    }
+  }, [route.params?.accountNumber]);
 
   useEffect(() => {
     const fetchReceiverName = async () => {

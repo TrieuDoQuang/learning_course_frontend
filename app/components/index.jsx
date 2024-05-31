@@ -7,6 +7,7 @@ import BeneficiaryItem from "./BeneficiaryItem";
 import Notification from "./Notification";
 import Category from "./Category";
 import FormatCurrency from "./FormatCurrency";
+import InputModal from "./InputModal";
 
 export {
   TransactionItem,
@@ -17,5 +18,6 @@ export {
   Notification,
   Category,
   BeneficiaryItem,
-  FormatCurrency
+  FormatCurrency,
+  InputModal
 };

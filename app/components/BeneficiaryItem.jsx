@@ -13,9 +13,7 @@ const BeneficiaryItem = ({ name, accountNumber }) => {
           <Text className="">{accountNumber}</Text>
         </View>
       </View>
-      <TouchableOpacity>
-        <FontAwesomeIcon icon={faEllipsisVertical} size={16} />
-      </TouchableOpacity>
+      <FontAwesomeIcon icon={faEllipsisVertical} size={16} />
     </View>
   );
 };
