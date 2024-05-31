@@ -15,6 +15,7 @@ const StackLayout = () => {
         options={{
           headerShown: true,
           headerTitleAlign: "center",
+          headerTitle: "Change Password",
           headerTitleStyle: { fontSize: 13, color: "#fff" },
           headerTintColor: "#fff",
           headerBackground: () => (
