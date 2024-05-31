@@ -11,13 +11,13 @@ import { TransactionService } from "../../services";
 import { useNotification } from "../../hooks";
 import { Notification } from "../../components";
 import { FormatCurrency } from "../../components";
+import { router } from "expo-router";
 
 const ConfirmTransaction = () => {
   const [otp, setOtp] = useState("");
   const { transaction } = useData();
   const { makeTransaction } = TransactionService();
   const { notification, showNotification } = useNotification();
-
   const handleOtpSubmit = async () => {
     try {
       await makeTransaction({
@@ -27,6 +27,13 @@ const ConfirmTransaction = () => {
       });
 
       showNotification("Transaction Completed!", "success");
+
+      setTimeout(() => {
+        router.replace({
+          pathname: `/Transfer`,
+        });
+      }, 3000);
+
     } catch (error) {
       showNotification(error.message, "error");
     }

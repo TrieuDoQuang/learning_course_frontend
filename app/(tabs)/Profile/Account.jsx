@@ -6,7 +6,6 @@ import {
   Alert,
   ActivityIndicator,
 } from "react-native";
-import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
 import useAuth from "../../hooks/useAuth";
 import CustomerService from "../../services/CustomerService";

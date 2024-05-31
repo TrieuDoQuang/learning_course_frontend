@@ -11,7 +11,7 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
 import InputItem from "../../components/InputItem";
-import { useNavigation, useFocusEffect } from "@react-navigation/native";
+import { useNavigation, useFocusEffect, useRoute } from "@react-navigation/native";
 import {
   CustomerService,
   TransactionService,
@@ -22,6 +22,7 @@ import { useAuth } from "../../hooks";
 import { useData } from "../../context/DataProvider";
 import { Notification } from "../../components";
 import { useNotification } from "../../hooks";
+import { useLocalSearchParams } from "expo-router";
 
 const Transfer = () => {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -36,29 +37,44 @@ const Transfer = () => {
   const { sendOtp } = TransactionService();
   const { customerId } = useAuth();
   const navigation = useNavigation();
+  const route = useRoute();
   const { setTransaction: setTransactionContext } = useData();
   const { notification, showNotification } = useNotification();
+  const defaultAccountQR = useLocalSearchParams();
+  const receiverAccountNumber = defaultAccountQR.account_number
+    ? defaultAccountQR.account_number
+    : transaction.receiver_account_number;
+
+  // Set the receiver's account number from the route params
+  useEffect(() => {
+    if (route.params?.accountNumber) {
+      setTransaction((prevTransaction) => ({
+        ...prevTransaction,
+        receiver_account_number: route.params.accountNumber,
+      }));
+    }
+  }, [route.params?.accountNumber]);
+
 
   useEffect(() => {
     const fetchReceiverName = async () => {
-      if (transaction.receiver_account_number.length === 10) {
-        try {
-          const response = await getCustomerByAccountNumber(
-            transaction.receiver_account_number
-          );
+      try {
+        const response = await getCustomerByAccountNumber(
+          receiverAccountNumber
+        );
 
-          setTransaction((prevTransaction) => ({
-            ...prevTransaction,
-            receiver_account_name: response.data.result.name,
-          }));
-        } catch (error) {
-          console.error("Failed to fetch customer name:", error);
-        }
+        setTransaction((prevTransaction) => ({
+          ...prevTransaction,
+          receiver_account_name: response.data.result.name,
+        }));
+        console.log(response.data.result.name);
+      } catch (error) {
+        console.error("Failed to fetch customer name:", error);
       }
     };
 
     fetchReceiverName();
-  }, [transaction.receiver_account_number]);
+  }, [receiverAccountNumber]);
 
   useFocusEffect(
     useCallback(() => {
@@ -98,7 +114,7 @@ const Transfer = () => {
 
   const handleConfirmTransaction = () => {
     if (
-      transaction.receiver_account_number &&
+      receiverAccountNumber &&
       transaction.receiver_account_name &&
       transaction.amount &&
       transaction.transaction_remark
@@ -180,7 +196,7 @@ const Transfer = () => {
               <View className="bg-slate-50 p-[9px] rounded-md mb-10">
                 <InputItem
                   title="Account Number"
-                  value={transaction.receiver_account_number}
+                  value={receiverAccountNumber}
                   onChangeText={(value) =>
                     handleInputChange("receiver_account_number", value)
                   }

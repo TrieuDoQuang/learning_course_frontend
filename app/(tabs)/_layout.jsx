@@ -11,11 +11,13 @@ import {
 import images from "../assets";
 import { useState, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
+import { useLocalSearchParams } from "expo-router";
 
 const TabLayouts = () => {
   const authContext = useContext(AuthContext);
   const { token } = authContext;
   const [isLoading, setIsLoading] = useState(true);
+  const { defaultPaymentAccount } = useLocalSearchParams();
 
   if (!token) {
     setIsLoading(false);
