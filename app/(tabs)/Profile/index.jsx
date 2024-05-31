@@ -97,11 +97,9 @@ const Profile = () => {
           <View className="px-6">
             <ProfileItem title="Account" />
             <ProfileItem title="Beneficiary" />
-            <ProfileItem title="Security" />
-            <ProfileItem title="Settings" />
-            <ProfileItem title="Help Center" />
+            <ProfileItem title="Chat" />
             <TouchableOpacity
-              className="w-[315px] bg-white mt-3 rounded-lg h-[40px] flex justify-center mb-2 border-red-600 border items-center"
+              className="w-[315px] bg-white mt-10 rounded-lg h-[40px] flex justify-center mb-2 border-red-600 border items-center"
               onPress={handleLogout}
             >
               <Text className="text-red-600"> Log out</Text>

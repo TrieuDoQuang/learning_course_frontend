@@ -10,7 +10,6 @@ import { useData } from "../../context/DataProvider";
 import { TransactionService } from "../../services";
 import { useNotification } from "../../hooks";
 import { Notification } from "../../components";
-import { FormatCurrency } from "../../components";
 import { router } from "expo-router";
 
 const ConfirmTransaction = () => {
@@ -33,7 +32,6 @@ const ConfirmTransaction = () => {
           pathname: `/Transfer`,
         });
       }, 3000);
-
     } catch (error) {
       showNotification(error.message, "error");
     }
@@ -71,7 +69,10 @@ const ConfirmTransaction = () => {
         <View className="grid gap-4 px-3 pb-6 bg-slate-50 mt-0 mb-2">
           <View className="flex flex-row justify-between">
             <Text>Amount</Text>
-            <Text>{FormatCurrency(transaction.amount)} VND</Text>
+            <Text>
+              {transaction.amount.toLocaleString("en-US").replace(/,/g, ".")}{" "}
+              VND
+            </Text>
           </View>
           <View className="flex flex-row justify-between">
             <Text>Transaction Remark</Text>

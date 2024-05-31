@@ -5,12 +5,11 @@ const BeneficiaryService = () => {
 
   const insertBeneficiary = async (beneficiary) => {
     try {
-      
       const response = await axiosPrivate.post(`/beneficiaries`, beneficiary);
 
       return response;
     } catch (e) {
-      console.log("Cannot insert beneficiary: " + e);
+      throw new Error(e.response.data); // Throwing the error to be caught in the calling function
     }
   };
 
