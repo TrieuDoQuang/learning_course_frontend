@@ -28,6 +28,15 @@ const Beneficiary = () => {
   const fetchBeneficiaries = async () => {
     try {
       const response = await getBeneficiariesByCustomerId(customerId);
+      if (
+        !response ||
+        !response.data ||
+        !response.data.result ||
+        !response.data.result.beneficiaries
+      ) {
+        // Beneficiaries data is null or undefined, return early
+        return;
+      }
       setBeneficiaries(response.data.result.beneficiaries);
     } catch (error) {
       console.error("Failed to fetch beneficiaries:", error);
@@ -103,17 +112,21 @@ const Beneficiary = () => {
         </View>
         <Text className="mb-3">Interbank Transfer To Accounts</Text>
         <View className="w-full mb-5 bg-slate-50 px-2 pb-8 justify-center rounded-md">
-          {beneficiaries.map((beneficiary) => (
-            <TouchableOpacity
-              onPress={() => toggleModal(beneficiary)}
-              key={beneficiary.id}
-            >
-              <BeneficiaryItem
-                name={beneficiary.name}
-                accountNumber={beneficiary.account_number}
-              />
-            </TouchableOpacity>
-          ))}
+          {beneficiaries && beneficiaries.length > 0 ? (
+            beneficiaries.map((beneficiary) => (
+              <TouchableOpacity
+                onPress={() => toggleModal(beneficiary)}
+                key={beneficiary.id}
+              >
+                <BeneficiaryItem
+                  name={beneficiary.name}
+                  accountNumber={beneficiary.account_number}
+                />
+              </TouchableOpacity>
+            ))
+          ) : (
+            <Text>No beneficiaries found</Text>
+          )}
         </View>
       </ScrollView>
 

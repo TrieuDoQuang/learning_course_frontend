@@ -7,6 +7,7 @@ import {
   TouchableOpacity,
   Modal,
   TextInput,
+  Alert,
 } from "react-native";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faUser } from "@fortawesome/free-solid-svg-icons";
@@ -44,12 +45,14 @@ const Transfer = () => {
   const route = useRoute();
   const { setTransaction: setTransactionContext } = useData();
   const { notification, showNotification } = useNotification();
-  const defaultAccountQR = useLocalSearchParams();
-  const receiverAccountNumber = defaultAccountQR.account_number
-    ? defaultAccountQR.account_number
-    : transaction.receiver_account_number;
-
-  // Set the receiver's account number from the route params
+  const data = useLocalSearchParams();
+  const receiverAccountNumber =
+    Object.keys(data)
+      .map(Number)
+      .sort((a, b) => a - b)
+      .map((key) => data[key])
+      .join("") || transaction.receiver_account_number;
+  console.log(receiverAccountNumber);
   useEffect(() => {
     if (route.params?.accountNumber) {
       setTransaction((prevTransaction) => ({
@@ -59,24 +62,26 @@ const Transfer = () => {
     }
   }, [route.params?.accountNumber]);
 
-
   useEffect(() => {
     const fetchReceiverName = async () => {
-      try {
-        const response = await getCustomerByAccountNumber(
-          receiverAccountNumber
-        );
-
-        setTransaction((prevTransaction) => ({
-          ...prevTransaction,
-          receiver_account_name: response.data.result.name,
-        }));
-        console.log(response.data.result.name);
-      } catch (error) {
-        console.error("Failed to fetch customer name:", error);
+      if (receiverAccountNumber.length === 10) {
+        try {
+          const response = await getCustomerByAccountNumber(
+            receiverAccountNumber
+          );
+          if (!response || !response.data) {
+            showNotification("Invalid account number", "error");
+            return;
+          }
+          setTransaction((prevTransaction) => ({
+            ...prevTransaction,
+            receiver_account_name: response.data.result.name,
+          }));
+        } catch (error) {
+          console.error("Failed to fetch customer name:", error);
+        }
       }
     };
-
     fetchReceiverName();
   }, [receiverAccountNumber]);
 
@@ -85,6 +90,10 @@ const Transfer = () => {
       const fetchSenderData = async () => {
         try {
           const response = await getCustomerById(customerId);
+          if (!response || !response.data) {
+            console.error("Invalid response from getCustomerById:", response);
+            throw new Error("Failed to fetch sender data");
+          }
           const senderData = response.data.result;
           setSender(senderData);
           setTransaction((prevTransaction) => ({
@@ -100,6 +109,13 @@ const Transfer = () => {
       const fetchDefaultPaymentAccount = async () => {
         try {
           const response = await getDefaultPaymentAccount(customerId);
+          if (!response || !response.data) {
+            console.error(
+              "Invalid response from getDefaultPaymentAccount:",
+              response
+            );
+            throw new Error("Failed to fetch default payment account");
+          }
           const defaultAccount = response.data.result;
           setDefaultPaymentAccount(defaultAccount);
           setTransaction((prevTransaction) => ({
@@ -124,7 +140,10 @@ const Transfer = () => {
       transaction.transaction_remark
     ) {
       if (transaction.amount > defaultPaymentAccount.current_balance) {
-        showNotification("Transfer amount must not be larger than current balance", "error");
+        showNotification(
+          "Transfer amount must not be larger than current balance",
+          "error"
+        );
       } else {
         setModalVisible(true);
       }
@@ -137,36 +156,44 @@ const Transfer = () => {
   };
 
   const handlePinSubmit = async () => {
-    const response = await getCustomerById(customerId);
-    const existingPinNumber = response.data.result.pin_number;
-
-    if (String(existingPinNumber) === pin) {
-      try {
+    try {
+      const response = await getCustomerById(customerId);
+      const existingPinNumber = response?.data?.result?.pin_number;
+      if (String(existingPinNumber) === pin) {
         await sendOtp({ receiver_email: sender.email });
         setTransactionContext(transaction);
         setTransaction({
           ...transaction,
           amount: 0,
-          receiver_account_number: "",
+          receiverAccountNumber: "",
           receiver_account_name: "",
         });
         navigation.navigate("ConfirmTransaction");
-      } catch (error) {
-        console.error("Failed to send OTP:", error);
+      } else {
+        showNotification("Invalid PIN", "error");
       }
-    } else {
-      showNotification("Invalid PIN", "error");
+    } catch (error) {
+      console.error("Failed to send OTP:", error);
+    } finally {
+      setModalVisible(false);
+      setPin("");
     }
-
-    setModalVisible(false);
-    setPin("");
   };
 
   const handleInputChange = (field, value) => {
-    setTransaction((prevTransaction) => ({
-      ...prevTransaction,
-      [field]: value,
-    }));
+    if (field === "receiver_account_number") {
+      if (/^\d*$/.test(value) && value.length <= 10) {
+        setTransaction((prevTransaction) => ({
+          ...prevTransaction,
+          [field]: value,
+        }));
+      }
+    } else {
+      setTransaction((prevTransaction) => ({
+        ...prevTransaction,
+        [field]: value,
+      }));
+    }
   };
 
   return (
@@ -208,6 +235,8 @@ const Transfer = () => {
                   onChangeText={(value) =>
                     handleInputChange("receiver_account_number", value)
                   }
+                  maxLength={10}
+                  keyboardType="numeric"
                 />
                 <InputItem
                   title="Account Name"

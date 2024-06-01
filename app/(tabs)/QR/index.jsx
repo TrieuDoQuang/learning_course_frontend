@@ -4,18 +4,19 @@ import { useAuth } from "../../hooks";
 import PaymentAccountService from "../../services/PaymentAccountService";
 import { Camera } from "expo-camera";
 import QRCode from "react-native-qrcode-svg";
-import { router, useFocusEffect } from "expo-router";
+import { useFocusEffect, useRouter } from "expo-router";
 
 export default function QR() {
   const { customerId } = useAuth();
   const [isScanning, setIsScanning] = useState(false);
-  const { getDefaultPaymentAccount } = PaymentAccountService();
-  const [defaultAccount, setDefaultAccount] = useState([]);
+  const { getDefaultPaymentAccount, getCustomerByAccountNumber } =
+    PaymentAccountService();
+  const [defaultAccount, setDefaultAccount] = useState({});
+  const [scannedAccount, setScannedAccount] = useState({});
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
   const [text, setText] = useState("Not yet scanned");
-
-  console.log("defaultAccount", defaultAccount);
+  const router = useRouter();
 
   useFocusEffect(
     useCallback(() => {
@@ -24,13 +25,33 @@ export default function QR() {
           const response = await getDefaultPaymentAccount(customerId);
           setDefaultAccount(response.data.result);
         } catch (error) {
-          console.error("Failed to fetch transactions:", error);
+          console.error("Failed to fetch default account:", error);
         }
       };
 
       fetchDefaultAccount();
     }, [customerId])
   );
+
+  // const fetchCustomerByAccountNumber = async (accountNumber) => {
+  //   console.log("Fetching customer by account number:", accountNumber);
+  //   try {
+  //     const response = await getCustomerByAccountNumber(accountNumber);
+  //     console.log("Fetched Account Response:", response);
+
+  //     // Check if response and response.data.result are defined
+  //     if (response && response.data && response.data.result) {
+  //       return response.data.result;
+  //     } else {
+  //       console.error("Invalid response structure:", response);
+  //       return null;
+  //     }
+  //   } catch (error) {
+  //     console.error("Failed to fetch customer name:", error);
+  //     return null;
+  //   }
+  // };
+
   useEffect(() => {
     (async () => {
       const { status } = await Camera.requestCameraPermissionsAsync();
@@ -38,16 +59,15 @@ export default function QR() {
     })();
   }, []);
 
-  const handleBarCodeScanned = ({ type, data }) => {
+  const handleBarCodeScanned = async ({ type, data }) => {
+    console.log("Scanned Data:", data);
     setScanned(true);
     setText(data);
-    console.log("Type: " + type + "\nData: " + data);
-    if (data === defaultAccount.account_number) {
-      router.push({
-        pathname: `/Transfer`,
-        params: defaultAccount,
-      });
-    }
+
+    router.push({
+      pathname: `/Transfer`,
+      params: data,
+    });
   };
 
   if (hasPermission === null) {
@@ -64,11 +84,9 @@ export default function QR() {
         <Text style={{ margin: 10 }}>No access to camera</Text>
         <Button
           title={"Allow Camera"}
-          onPress={() => {
-            (async () => {
-              const { status } = await Camera.requestCameraPermissionsAsync();
-              setHasPermission(status === "granted");
-            })();
+          onPress={async () => {
+            const { status } = await Camera.requestCameraPermissionsAsync();
+            setHasPermission(status === "granted");
           }}
         />
       </View>
