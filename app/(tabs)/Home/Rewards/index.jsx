@@ -21,11 +21,12 @@ const Rewards = () => {
   const [culinaryRewards, setCulinaryRewards] = useState([]);
   const [entertainmentRewards, setEntertainmentRewards] = useState([]);
   const [shoppingRewards, setShoppingRewards] = useState([]);
+  const [userRewards, setUserRewards] = useState([]);
   const [paymentAccounts, setPaymentAccounts] = useState([]);
   const [selectedPaymentAccount, setSelectedPaymentAccount] = useState();
   const [accountDropdownVisible, setAccountDropdownVisible] = useState(false);
   const { getPaymentAccounts } = PaymentAccountService();
-  const { getAllRewards } = RewardService();
+  const { getAllRewards, getUserRewards } = RewardService();
   const { customerId } = useAuth();
 
   useEffect(() => {
@@ -35,10 +36,20 @@ const Rewards = () => {
         setPaymentAccounts(response.data.result.paymentAccounts);
         if (response.data.result.paymentAccounts.length > 0)
           setSelectedPaymentAccount(response.data.result.paymentAccounts[0]);
-        //console.log(response.data.result);
-        console.log(response.data.result.paymentAccounts[0]);
+        console.log(response.data.result);
+        //console.log(response.data.result.paymentAccounts[0]);
       } catch (error) {
         console.error("Failed to fetch payment accounts", error);
+      }
+    };
+
+    const fetchUserRewards = async () => {
+      try {
+        const response = await getUserRewards(customerId);
+        setUserRewards(response.data.result.accountRewards);
+        console.log(response.data.result);
+      } catch (error) {
+        console.error("Failed to fetch user rewards", error);
       }
     };
 
@@ -66,6 +77,7 @@ const Rewards = () => {
 
     fetchPaymentAccounts();
     fetchAllRewards();
+    fetchUserRewards();
   }, []);
 
   const handleSelectAccount = (paymentAccount) => {
@@ -107,7 +119,10 @@ const Rewards = () => {
                 <View className="bg-slate-50 rounded-md border rounded border-b-0">
                   {paymentAccounts.map((paymentAccount, index) => {
                     return (
-                      <TouchableOpacity key={paymentAccount.id} onPress={() => handleSelectAccount(paymentAccount)}>
+                      <TouchableOpacity
+                        key={paymentAccount.id}
+                        onPress={() => handleSelectAccount(paymentAccount)}
+                      >
                         <View
                           className={
                             "border-b " +
@@ -130,6 +145,26 @@ const Rewards = () => {
               )}
             </View>
           )}
+
+          <View className="my-5">
+            <Text className="text-sm mb-2">My Voucher</Text>
+            <ScrollView
+              horizontal={true}
+              showsHorizontalScrollIndicator={false}
+            >
+              {userRewards &&
+                userRewards.map((reward) => {
+                  return (
+                    <Category
+                      key={reward.id}
+                      image={reward.image_link}
+                      title={reward.reward_name}
+                      price={reward.cost_point}
+                    />
+                  );
+                })}
+            </ScrollView>
+          </View>
 
           <View className="my-5">
             <Text className="text-sm mb-2">Shopping Voucher</Text>
