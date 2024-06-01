@@ -7,6 +7,8 @@ import {
   ActivityIndicator,
 } from "react-native";
 import { useState } from "react";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import { faEye, faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import useAuth from "../../hooks/useAuth";
 import CustomerService from "../../services/CustomerService";
 import InputItem from "../../components/InputItem";
@@ -25,6 +27,9 @@ const Account = () => {
     initialChangePasswordData
   );
   const [loading, setLoading] = useState(false);
+  const [showCurrentPassword, setShowCurrentPassword] = useState(false);
+  const [showNewPassword, setShowNewPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const { ChangePassword } = CustomerService();
 
   const handleChange = (field, value) => {
@@ -68,7 +73,6 @@ const Account = () => {
         },
         customerId
       );
-      // if (response.data.status == "OK") {
       Alert.alert(
         "Success",
         "Password changed successfully",
@@ -76,9 +80,6 @@ const Account = () => {
         { cancelable: false }
       );
       setChangePasswordData(initialChangePasswordData);
-      // }
-
-      // logout();
     } catch (error) {
       Alert.alert("Error", "Couldn't change password: " + error.message);
     } finally {
@@ -90,11 +91,20 @@ const Account = () => {
     <ScrollView className="pt-5 bg-gray-200 px-2">
       <View className="h-[107px] w-full mb-5 bg-slate-50 p-2 justify-center rounded-md">
         <InputItem
-          secureTextEntry
+          secureTextEntry={!showCurrentPassword}
           value={changePasswordData.currentPassword}
           title="Your Current Password"
           onChangeText={(value) => handleChange("currentPassword", value)}
         />
+        <TouchableOpacity
+          onPress={() => setShowCurrentPassword(!showCurrentPassword)}
+          className="absolute right-4 top-3 mt-9 mr-2"
+        >
+          <FontAwesomeIcon
+            icon={showCurrentPassword ? faEyeSlash : faEye}
+            className="text-gray-600"
+          />
+        </TouchableOpacity>
       </View>
       <View className="w-full bg-slate-50 p-2 py-6 mb-10 justify-center rounded-md">
         <View className="mb-3 p-2 bg-blue-200 bg-opacity-20 rounded-md">
@@ -111,18 +121,40 @@ const Account = () => {
           </View>
           <Text>For example: b&1A2c3d; B@123456; 12345678a*</Text>
         </View>
-        <InputItem
-          secureTextEntry
-          title="New Password"
-          value={changePasswordData.newPassword}
-          onChangeText={(value) => handleChange("newPassword", value)}
-        />
-        <InputItem
-          secureTextEntry
-          title="Confirm Password"
-          value={changePasswordData.confirmPassword}
-          onChangeText={(value) => handleChange("confirmPassword", value)}
-        />
+        <View className="relative">
+          <InputItem
+            secureTextEntry={!showNewPassword}
+            title="New Password"
+            value={changePasswordData.newPassword}
+            onChangeText={(value) => handleChange("newPassword", value)}
+          />
+          <TouchableOpacity
+            onPress={() => setShowNewPassword(!showNewPassword)}
+            className="absolute right-4 top-3 mt-5"
+          >
+            <FontAwesomeIcon
+              icon={showNewPassword ? faEyeSlash : faEye}
+              className="text-gray-600"
+            />
+          </TouchableOpacity>
+        </View>
+        <View className="relative mt-4">
+          <InputItem
+            secureTextEntry={!showConfirmPassword}
+            title="Confirm Password"
+            value={changePasswordData.confirmPassword}
+            onChangeText={(value) => handleChange("confirmPassword", value)}
+          />
+          <TouchableOpacity
+            onPress={() => setShowConfirmPassword(!showConfirmPassword)}
+            className="absolute right-4 top-3 mt-5"
+          >
+            <FontAwesomeIcon
+              icon={showConfirmPassword ? faEyeSlash : faEye}
+              className="text-gray-600"
+            />
+          </TouchableOpacity>
+        </View>
         <TouchableOpacity
           className="mt-4 bg-black p-2 flex flex-row rounded-xl h-[48px] items-center justify-center"
           onPress={handleChangePassword}

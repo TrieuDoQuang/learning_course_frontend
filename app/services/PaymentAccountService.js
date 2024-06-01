@@ -16,6 +16,18 @@ const PaymentAccountService = () => {
     }
   };
 
+  const getPaymentAccountByAccountNumber = async (accountNumber) => {
+    try {
+      const response = await axiosPrivate.get(
+        `/paymentAccounts/getByAccountNumber/${accountNumber}`
+      );
+
+      return response;
+    } catch (e) {
+      throw new Error(e.response);
+    }
+  };
+
   const getPaymentAccounts = async (customerId) => {
     try {
       const response = await axiosPrivate.get(
@@ -56,7 +68,6 @@ const PaymentAccountService = () => {
       const response = await axiosPrivate.get(
         `/paymentAccounts/getByAccountNumber/${accountNumber}`
       );
-
       return response;
     } catch (e) {
       console.log("Cannot get Payment Accounts: " + e);
@@ -119,6 +130,7 @@ const PaymentAccountService = () => {
     setPaymentAccountDefault,
     topUpPaymentAccount,
     withdrawPaymentAccount,
+    getPaymentAccountByAccountNumber,
   };
 };
 

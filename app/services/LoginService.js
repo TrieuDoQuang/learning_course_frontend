@@ -5,7 +5,20 @@ export const login = async (loginData) => {
     const response = await axios.post("/customers/login", loginData);
 
     return response;
-  } catch (error) {
-    console.error("Axios error message:", error.message);
+  } catch (e) {
+    throw new Error(e.response.data);
+  }
+};
+
+export const signUp = async (customerData) => {
+  try {
+    const response = await axios.post(
+      "/customers/insertCustomer",
+      customerData
+    );
+
+    return response;
+  } catch (e) {
+    throw new Error(e.response.data);
   }
 };

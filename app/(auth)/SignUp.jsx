@@ -9,11 +9,18 @@ import { Link } from "expo-router";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-import { faArrowRight } from "@fortawesome/free-solid-svg-icons";
+import {
+  faArrowRight,
+  faEye,
+  faEyeSlash,
+} from "@fortawesome/free-solid-svg-icons";
 import { useState } from "react";
 import DateTimePicker from "@react-native-community/datetimepicker";
-
+import { signUp } from "../services/LoginService";
+import { useNotification } from "../hooks";
+import { Notification } from "../components";
 const SignUp = () => {
+  const { notification, showNotification } = useNotification();
   const [user, setUser] = useState({
     name: "",
     email: "",
@@ -22,22 +29,54 @@ const SignUp = () => {
     dob: new Date(),
     password: "",
     pin: "",
+    address: "",
   });
+
+  console.log(user);
   const [showDatePicker, setShowDatePicker] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
   const handleSelectDate = (event, selectedDate) => {
     setShowDatePicker(false);
     if (selectedDate) {
       handleChange("dob", selectedDate);
     }
   };
-  console.log(user);
+
   const handleChange = (name, value) => {
     setUser((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleSignUp = async () => {
+    try {
+      const response = await signUp({
+        name: user.name,
+        email: user.email,
+        address: user.address,
+        phone_number: user.phone,
+        citizen_id: user.citizen,
+        date_of_birth: user.dob,
+        password: user.password,
+        pin_number: user.pin,
+      });
+      console.log(response);
+      showNotification("Sign up successfully", "success");
+    } catch (error) {
+      showNotification(error.message, "error");
+    }
   };
 
   return (
     <SafeAreaView className="h-full">
       <ScrollView>
+        <View className="absolute top-[-60px] self-center">
+          {notification.type && (
+            <Notification
+              type={notification.type}
+              message={notification.message}
+            />
+          )}
+        </View>
         <View className="p-5">
           <View className="bg-gradient-to-r from-blue-1 to-blue-2 h-9"></View>
           <Text className="text-center font-bold text-[28px]">Sign up</Text>
@@ -76,6 +115,17 @@ const SignUp = () => {
               />
             </View>
             <View>
+              <Text>Address</Text>
+              <TextInput
+                value={user.address}
+                onChangeText={(value) => {
+                  handleChange("address", value);
+                }}
+                placeholder="76/4 123 street, HCMC"
+                className=" h-[53px] p-2 border-2 border-gray-300 rounded-2xl focus:outline-none focus:border-blue-400"
+              />
+            </View>
+            <View>
               <Text>Citizen Identity (*)</Text>
               <TextInput
                 value={user.citizen}
@@ -108,15 +158,26 @@ const SignUp = () => {
             </View>
             <View>
               <Text>Password</Text>
-              <TextInput
-                value={user.password}
-                onChangeText={(value) => {
-                  handleChange("password", value);
-                }}
-                secureTextEntry
-                placeholder="*********"
-                className=" h-[53px] p-2 border-2 border-gray-300 rounded-2xl focus:outline-none focus:border-blue-400"
-              />
+              <View className="relative">
+                <TextInput
+                  value={user.password}
+                  onChangeText={(value) => {
+                    handleChange("password", value);
+                  }}
+                  secureTextEntry={!showPassword}
+                  placeholder="*********"
+                  className="h-[53px] p-2 border-2 border-gray-300 rounded-2xl focus:outline-none focus:border-blue-400"
+                />
+                <TouchableOpacity
+                  onPress={() => setShowPassword(!showPassword)}
+                  className="absolute right-4 top-3 mt-2"
+                >
+                  <FontAwesomeIcon
+                    icon={showPassword ? faEyeSlash : faEye}
+                    className="text-gray-600"
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
             <View>
               <Text>Pin Number</Text>
@@ -129,7 +190,10 @@ const SignUp = () => {
                 className=" h-[53px] p-2 border-2 border-gray-300 rounded-2xl focus:outline-none focus:border-blue-400"
               />
             </View>
-            <TouchableOpacity className="bg-black p-2 flex flex-row rounded-xl h-[53px] items-center  justify-center">
+            <TouchableOpacity
+              className="bg-black p-2 flex flex-row rounded-xl h-[53px] items-center  justify-center"
+              onPress={() => handleSignUp()}
+            >
               <Text className="text-slate-50 text-center font-bold pr-2">
                 Create new account
               </Text>
