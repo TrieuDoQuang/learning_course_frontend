@@ -15,6 +15,7 @@ import { useState, useEffect } from "react";
 import PaymentAccountService from "../../../services/PaymentAccountService";
 import RewardService from "../../../services/RewardService";
 import useAuth from "../../../hooks/useAuth";
+import RewardDetailsModal from "./RewardDetailsModal";
 
 const Rewards = () => {
   const [rewards, setRewards] = useState([]);
@@ -26,33 +27,17 @@ const Rewards = () => {
   const [selectedPaymentAccount, setSelectedPaymentAccount] = useState();
   const [accountDropdownVisible, setAccountDropdownVisible] = useState(false);
   const { getPaymentAccounts } = PaymentAccountService();
-  const { getAllRewards, getUserRewards } = RewardService();
+  const { getAllRewards, getUserRewards, redeemReward } = RewardService();
   const { customerId } = useAuth();
 
+  //reward details
+  const [isRewardDetailModalVisible, setIsRewardDetailModalVisible] =
+    useState(false);
+  const [selectedReward, setSelectedReward] = useState();
+  const [rewardModalMessage, setRewardModalMessage] = useState("");
+  const [isActionSuccess, setIsActionSuccess] = useState(false);
+
   useEffect(() => {
-    const fetchPaymentAccounts = async () => {
-      try {
-        const response = await getPaymentAccounts(customerId);
-        setPaymentAccounts(response.data.result.paymentAccounts);
-        if (response.data.result.paymentAccounts.length > 0)
-          setSelectedPaymentAccount(response.data.result.paymentAccounts[0]);
-        console.log(response.data.result);
-        //console.log(response.data.result.paymentAccounts[0]);
-      } catch (error) {
-        console.error("Failed to fetch payment accounts", error);
-      }
-    };
-
-    const fetchUserRewards = async () => {
-      try {
-        const response = await getUserRewards(customerId);
-        setUserRewards(response.data.result.accountRewards);
-        console.log(response.data.result);
-      } catch (error) {
-        console.error("Failed to fetch user rewards", error);
-      }
-    };
-
     const fetchAllRewards = async () => {
       try {
         const response = await getAllRewards();
@@ -80,6 +65,52 @@ const Rewards = () => {
     fetchUserRewards();
   }, []);
 
+  const fetchPaymentAccounts = async () => {
+    try {
+      const response = await getPaymentAccounts(customerId);
+      setPaymentAccounts(response.data.result.paymentAccounts);
+      if (response.data.result.paymentAccounts.length > 0)
+        setSelectedPaymentAccount(response.data.result.paymentAccounts[0]);
+      console.log(response.data.result);
+      //console.log(response.data.result.paymentAccounts[0]);
+    } catch (error) {
+      console.error("Failed to fetch payment accounts", error);
+    }
+  };
+
+  const fetchUserRewards = async () => {
+    try {
+      const response = await getUserRewards(customerId);
+      setUserRewards(response.data.result.accountRewards);
+      console.log(response.data.result);
+    } catch (error) {
+      console.error("Failed to fetch user rewards", error);
+    }
+  };
+
+  const requestRedeemReward = async () => {
+    console.log(selectedReward.id + " /// " + selectedPaymentAccount.id);
+    try {
+      const response = await redeemReward(
+        selectedReward.id,
+        selectedPaymentAccount.id
+      );
+      //console.log(response);
+      if (response.status === 200) {
+        fetchUserRewards();
+        fetchPaymentAccounts();
+        setIsActionSuccess(true);
+        setRewardModalMessage(response.data.message);
+      }
+    } catch (error) {
+      setIsActionSuccess(false);
+      setRewardModalMessage(
+        "Failed to redeem reward. Insufficient points or voucher has been redeemed using this account."
+      );
+      console.error("Failed to fetch rewards", error);
+    }
+  };
+
   const handleSelectAccount = (paymentAccount) => {
     setSelectedPaymentAccount(paymentAccount);
     setAccountDropdownVisible(false);
@@ -89,7 +120,7 @@ const Rewards = () => {
     <SafeAreaView className="bg-gray-200 h-full">
       <ScrollView>
         <View className="p-3 pt-5">
-          {selectedPaymentAccount && (
+          {selectedPaymentAccount ? (
             <View className="">
               <View className="bg-slate-50 rounded-md border rounded">
                 <View className="flex-row p-[9px] items-center">
@@ -144,6 +175,16 @@ const Rewards = () => {
                 </View>
               )}
             </View>
+          ) : (
+            <View className="bg-slate-50 rounded-md border rounded">
+              <View className="flex-row p-[9px] items-center">
+                <View className="ml-4 mr-4">
+                  <Text className="font-bold">
+                    You don't have any payment account yet.
+                  </Text>
+                </View>
+              </View>
+            </View>
           )}
 
           <View className="my-5">
@@ -152,17 +193,22 @@ const Rewards = () => {
               horizontal={true}
               showsHorizontalScrollIndicator={false}
             >
-              {userRewards &&
+              {userRewards.length > 0 ? (
                 userRewards.map((reward) => {
                   return (
                     <Category
                       key={reward.id}
-                      image={reward.image_link}
-                      title={reward.reward_name}
-                      price={reward.cost_point}
+                      reward={reward}
+                      setModalVisibility={setIsRewardDetailModalVisible}
+                      setSelectedReward={setSelectedReward}
                     />
                   );
-                })}
+                })
+              ) : (
+                <View>
+                  <Text>You don't have any voucher yet.</Text>
+                </View>
+              )}
             </ScrollView>
           </View>
 
@@ -177,9 +223,9 @@ const Rewards = () => {
                   return (
                     <Category
                       key={reward.id}
-                      image={reward.image_link}
-                      title={reward.reward_name}
-                      price={reward.cost_point}
+                      reward={reward}
+                      setModalVisibility={setIsRewardDetailModalVisible}
+                      setSelectedReward={setSelectedReward}
                     />
                   );
                 })}
@@ -196,9 +242,9 @@ const Rewards = () => {
                   return (
                     <Category
                       key={reward.id}
-                      image={reward.image_link}
-                      title={reward.reward_name}
-                      price={reward.cost_point}
+                      reward={reward}
+                      setModalVisibility={setIsRewardDetailModalVisible}
+                      setSelectedReward={setSelectedReward}
                     />
                   );
                 })}
@@ -215,15 +261,26 @@ const Rewards = () => {
                   return (
                     <Category
                       key={reward.id}
-                      image={reward.image_link}
-                      title={reward.reward_name}
-                      price={reward.cost_point}
+                      reward={reward}
+                      setModalVisibility={setIsRewardDetailModalVisible}
+                      setSelectedReward={setSelectedReward}
                     />
                   );
                 })}
             </ScrollView>
           </View>
         </View>
+        {selectedReward && (
+          <RewardDetailsModal
+            isModalVisible={isRewardDetailModalVisible}
+            setIsModalVisible={setIsRewardDetailModalVisible}
+            reward={selectedReward}
+            actionMessage={rewardModalMessage}
+            setActionMessage={setRewardModalMessage}
+            isActionSuccess={isActionSuccess}
+            handleRedeem={requestRedeemReward}
+          />
+        )}
       </ScrollView>
     </SafeAreaView>
   );

@@ -25,9 +25,23 @@ const RewardService = () => {
     }
   };
 
+  const redeemReward = async (rewardId, paymentAccountId) => {
+    try {
+      const response = await axiosPrivate.post(
+        `/rewards/userReward/redeem`, {
+          reward_id: rewardId,
+          payment_account_id: paymentAccountId,
+        });
+      return response;
+    } catch (e) {
+      console.log("Cannot redeem reward: " + e);
+    }
+  };
+
   return {
     getAllRewards,
     getUserRewards,
+    redeemReward,
   };
 };
 
