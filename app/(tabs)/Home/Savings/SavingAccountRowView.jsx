@@ -5,8 +5,11 @@ import { faPiggyBank, faCircleInfo } from "@fortawesome/free-solid-svg-icons";
 import { currencyFormatVN } from "../../../utils/CurrencyUtil";
 
 const SavingAccountRowView = (props) => {
-  const { savingAccount } = props;
-
+  const {
+    savingAccount,
+    setSelectedSavingAccount,
+    setsIsAccountDetailsModalVisible,
+  } = props;
   return (
     <View
       className="flex-row items-center justify-between mb-4 ml-2 mr-2 bg-slate-100 py-2 px-2 rounded-md"
@@ -32,13 +35,11 @@ const SavingAccountRowView = (props) => {
         </View>
       </View>
       <TouchableOpacity
-        onPress={() =>
-          router.push({
-            pathname: `/Home/PaymentAccount/AccountDetail`,
-            params: paymentAccount,
-          })
-        }
         className="mr-4"
+        onPress={() => {
+          setSelectedSavingAccount(savingAccount);
+          setsIsAccountDetailsModalVisible(true);
+        }}
       >
         <FontAwesomeIcon icon={faCircleInfo} size={20} />
       </TouchableOpacity>

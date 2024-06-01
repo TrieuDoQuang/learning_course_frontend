@@ -21,6 +21,7 @@ import { SelectList } from "react-native-dropdown-select-list";
 import SavingAccountRowView from "./SavingAccountRowView";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { currencyFormatVN } from "../../../utils/CurrencyUtil";
+import SavingAccountDetailsModal from "./SavingAccountDetailsModal";
 
 const Savings = () => {
   const [paymentAccounts, setPaymentAccounts] = useState([]);
@@ -30,7 +31,7 @@ const Savings = () => {
   const [selectedAccountStatus, setSelectedAccountStatus] = useState("All");
   const [isAddModalVisible, setIsAddModalVisible] = useState(false);
   const { customerId } = useAuth();
-  const { getUserSavingAccounts, getAllInterestRates, insertSavingAccount } =
+  const { getUserSavingAccounts, getAllInterestRates, insertSavingAccount, withdrawSavingAccount } =
     SavingAccountService();
   const { getPaymentAccounts } = PaymentAccountService();
 
@@ -41,6 +42,12 @@ const Savings = () => {
   const [depositAmount, setDepositAmount] = useState(0);
   const [errorMessage, setErrorMessage] = useState("");
   const [successMessage, setSuccessMessage] = useState("");
+
+  //show saving account details
+  const [selectedSavingAccount, setSelectedSavingAccount] = useState();
+  const [isAccountDetailsModalVisible, setsIsAccountDetailsModalVisible] =
+    useState(false);
+  const [withdrawMessage, setWithdrawMessage] = useState("")
 
   const data = [
     { key: "All", value: "All" },
@@ -125,13 +132,12 @@ const Savings = () => {
     if (response.data.status === "OK") {
       fetchUserSavingAccounts();
       fetchPaymentAccounts();
-      setSelectedDepositPackage(undefined)
-      setSelectedAssociatedAccount(undefined)
-      setDepositAmount(0)
-      setSuccessMessage(response.data.message)
+      setSelectedDepositPackage(undefined);
+      setSelectedAssociatedAccount(undefined);
+      setDepositAmount(0);
+      setSuccessMessage(response.data.message);
       setErrorMessage("");
-    }
-    else{
+    } else {
       setErrorMessage(response.data.message);
     }
   };
@@ -173,6 +179,17 @@ const Savings = () => {
       console.error("Failed to fetch payment accounts", error);
     }
   };
+
+  const handleWithdraw = async (savingAccount) => {
+    response = await withdrawSavingAccount(savingAccount.id)
+    if (response.data.status === "OK") {
+      fetchUserSavingAccounts();
+      fetchPaymentAccounts();
+      setWithdrawMessage(response.data.message);
+    } else {
+      setWithdrawMessage(response.data.message);
+    }
+  }
 
   useEffect(() => {
     const fetchInterestRates = async () => {
@@ -242,6 +259,10 @@ const Savings = () => {
                 <SavingAccountRowView
                   key={savingAccount.id}
                   savingAccount={savingAccount}
+                  setSelectedSavingAccount={setSelectedSavingAccount}
+                  setsIsAccountDetailsModalVisible={
+                    setsIsAccountDetailsModalVisible
+                  }
                 />
               );
             })}
@@ -250,6 +271,10 @@ const Savings = () => {
                 <SavingAccountRowView
                   key={savingAccount.id}
                   savingAccount={savingAccount}
+                  setSelectedSavingAccount={setSelectedSavingAccount}
+                  setsIsAccountDetailsModalVisible={
+                    setsIsAccountDetailsModalVisible
+                  }
                 />
               );
             })}
@@ -262,6 +287,10 @@ const Savings = () => {
               <SavingAccountRowView
                 key={savingAccount.id}
                 savingAccount={savingAccount}
+                setSelectedSavingAccount={setSelectedSavingAccount}
+                setsIsAccountDetailsModalVisible={
+                  setsIsAccountDetailsModalVisible
+                }
               />
             );
           })}
@@ -272,6 +301,10 @@ const Savings = () => {
               <SavingAccountRowView
                 key={savingAccount.id}
                 savingAccount={savingAccount}
+                setSelectedSavingAccount={setSelectedSavingAccount}
+                setsIsAccountDetailsModalVisible={
+                  setsIsAccountDetailsModalVisible
+                }
               />
             );
           })}
@@ -393,6 +426,18 @@ const Savings = () => {
           </View>
         </View>
       </Modal>
+
+      {selectedSavingAccount && depositPackages && (
+        <SavingAccountDetailsModal
+          isModalVisible={isAccountDetailsModalVisible}
+          setIsModalVisible={setsIsAccountDetailsModalVisible}
+          savingAccount={selectedSavingAccount}
+          interestRates={depositPackages}
+          handleWithdraw={handleWithdraw}
+          withdrawMessage={withdrawMessage}
+          setWithdrawMessage={setWithdrawMessage}
+        />
+      )}
     </SafeAreaView>
   );
 };
