@@ -10,6 +10,8 @@ import { router } from "expo-router";
 import { useNotification } from "../../hooks";
 import { Notification } from "../../components";
 
+// Author: Dat
+// This component is used to display the beneficiary screen, allow user to add, delete and view beneficiary
 const Beneficiary = () => {
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [isInputModalVisibal, setIsInputModalVisible] = useState(false);

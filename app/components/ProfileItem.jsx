@@ -3,6 +3,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { View, Text, TouchableOpacity } from "react-native";
 import { Link } from "expo-router";
 
+
+// Author: Dat
+// This component is used to display a single profile item
 const ProfileItem = ({ title }) => {
   return (
     <View className="w-full bg-slate-50 rounded-lg h-[52px] flex justify-center mb-3">

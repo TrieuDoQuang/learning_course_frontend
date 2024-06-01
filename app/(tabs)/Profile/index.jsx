@@ -22,6 +22,9 @@ import { useAuth } from "../../hooks";
 import { useState, useEffect } from "react";
 import { CustomerService } from "../../services";
 
+
+// Author: Trieu
+// This component is used to display the profile screen
 const Profile = () => {
   const [customerData, setCustomerData] = useState([]);
   const { getCustomerById } = CustomerService();

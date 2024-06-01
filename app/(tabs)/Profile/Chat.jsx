@@ -12,6 +12,9 @@ import { ChatbotService } from "../../services/ChatboxService";
 // Helper function to delay execution
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
+
+// Author: Dat
+// This component is used to display the chat screen, which allows users to chat with a chatbot
 const Chat = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");

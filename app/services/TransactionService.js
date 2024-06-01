@@ -3,6 +3,7 @@ import { useAxiosPrivate } from "../hooks";
 const TransactionService = () => {
   const axiosPrivate = useAxiosPrivate();
 
+  //This function is used to get all transactions by customer ID by making a GET request to the /transactions/getByCustomerId/${customerId} endpoint.
   const getAllTransactionsByCustomerId = async (customerId) => {
     try {
       const response = await axiosPrivate.get(
@@ -21,6 +22,7 @@ const TransactionService = () => {
     }
   };
 
+  //This function is used to send an OTP by making a POST request to the /transactions/sendOtp endpoint.
   const sendOtp = async (otpRequest) => {
     try {
       const response = await axiosPrivate.post(
@@ -34,6 +36,7 @@ const TransactionService = () => {
     }
   };
 
+  //  This function is used to verify OTP and make a transaction by making a POST request to the /transactions/verifyOtpAndMakeTransaction endpoint.
   const makeTransaction = async (otpVerificationRequest) => {
     try {
       const response = await axiosPrivate.post(

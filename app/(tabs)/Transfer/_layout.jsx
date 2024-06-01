@@ -2,6 +2,8 @@ import { Stack } from "expo-router";
 import images from "../../assets";
 import { ImageBackground } from "react-native";
 
+// Author: Dat
+// This component is used to display the stack layout of the transfer module include Transfer and ConfirmTransaction
 const StackLayout = () => {
   return (
     <Stack>

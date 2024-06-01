@@ -27,7 +27,12 @@ import { useAuth } from "../../hooks";
 import { useData } from "../../context/DataProvider";
 import { Notification } from "../../components";
 import { useNotification } from "../../hooks";
+import { useLocalSearchParams } from "expo-router";
 
+
+
+// Author: Dat
+// This component is used to display the transfer screen
 const Transfer = () => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [pin, setPin] = useState("");

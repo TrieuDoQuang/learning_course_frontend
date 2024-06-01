@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+// This hook is used to show notifications to the user
 const useNotification = () => {
   const [notification, setNotification] = useState({
     message: "",

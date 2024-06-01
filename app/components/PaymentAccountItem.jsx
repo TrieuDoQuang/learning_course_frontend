@@ -13,6 +13,9 @@ import CustomerService from "../services/CustomerService";
 import { useAuth } from "../hooks";
 import { router } from "expo-router";
 
+
+// Author: Dat
+// This component is used to display a single payment account item
 const PaymentAccountItem = ({
   isOpenAccount,
   setIsOpenAccount,

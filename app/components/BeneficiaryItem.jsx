@@ -3,6 +3,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faEllipsisVertical } from "@fortawesome/free-solid-svg-icons";
 import images from "../assets";
 
+
+// Author: Dat
+// This component is used to display a single beneficiary item
 const BeneficiaryItem = ({ name, accountNumber }) => {
   return (
     <View className="justify-between flex-row mt-5 items-center pb-2 px-2 border-b-[1px]">

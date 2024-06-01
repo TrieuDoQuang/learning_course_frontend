@@ -1,6 +1,9 @@
 import { createContext, useState, useEffect } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { jwtDecode } from "jwt-decode";
+
+
+// This context is used to manage the authentication state of the user
 export const AuthContext = createContext({
   token: "",
   refreshToken: "",
@@ -10,6 +13,7 @@ export const AuthContext = createContext({
   logout: () => {},
 });
 
+// This component is used to provide the authentication context to the application
 const AuthContextProvider = ({ children }) => {
   const [token, setToken] = useState("");
   const [refreshToken, setRefreshToken] = useState("");

@@ -1,5 +1,6 @@
 import { useAxiosPrivate } from "../hooks";
 
+//This function is used to get a customer by ID by making a GET request to the /customers/getById/${customerId} endpoint.
 const CustomerService = () => {
   const axiosPrivate = useAxiosPrivate();
 
@@ -15,6 +16,7 @@ const CustomerService = () => {
     }
   };
 
+  //This function is used to change a customer's password by making a PUT request to the /customers/changePassword/${customerId} endpoint.
   const ChangePassword = async (changePasswordData, customerId) => {
     try {
       const response = await axiosPrivate.put(

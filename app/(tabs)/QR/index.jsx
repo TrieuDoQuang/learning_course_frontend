@@ -6,6 +6,8 @@ import { Camera } from "expo-camera";
 import QRCode from "react-native-qrcode-svg";
 import { useFocusEffect, useRouter } from "expo-router";
 
+// Author: Trieu
+// This component is used to display the QR code screen, which allows users to generate and scan QR codes
 export default function QR() {
   const { customerId } = useAuth();
   const [isScanning, setIsScanning] = useState(false);

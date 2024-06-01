@@ -6,6 +6,9 @@ import {
   faCircleExclamation,
 } from "@fortawesome/free-solid-svg-icons";
 
+
+// Author: Trieu
+// This component is used to display a notification message
 const Notification = ({ type = "success", message = "" }) => {
   const slideAnim = useRef(new Animated.Value(-50)).current; // Initial value for Y position
   const fadeAnim = useRef(new Animated.Value(0)).current; // Initial value for opacity
