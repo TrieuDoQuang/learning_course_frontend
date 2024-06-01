@@ -23,7 +23,7 @@ const Rewards = () => {
   const [shoppingRewards, setShoppingRewards] = useState([]);
   const [paymentAccounts, setPaymentAccounts] = useState([]);
   const [selectedPaymentAccount, setSelectedPaymentAccount] = useState();
-  const [modalVisible, setModalVisible] = useState(false);
+  const [accountDropdownVisible, setAccountDropdownVisible] = useState(false);
   const { getPaymentAccounts } = PaymentAccountService();
   const { getAllRewards } = RewardService();
   const { customerId } = useAuth();
@@ -68,13 +68,18 @@ const Rewards = () => {
     fetchAllRewards();
   }, []);
 
+  const handleSelectAccount = (paymentAccount) => {
+    setSelectedPaymentAccount(paymentAccount);
+    setAccountDropdownVisible(false);
+  };
+
   return (
     <SafeAreaView className="bg-gray-200 h-full">
       <ScrollView>
         <View className="p-3 pt-5">
           {selectedPaymentAccount && (
             <View className="">
-              <View className="bg-slate-50 rounded-md">
+              <View className="bg-slate-50 rounded-md border rounded">
                 <View className="flex-row p-[9px] items-center">
                   <FontAwesomeIcon icon={faUser} color="orange" size={25} />
                   <View className="ml-4 mr-12">
@@ -85,11 +90,44 @@ const Rewards = () => {
                       Reward Points: {selectedPaymentAccount.reward_point} RWP
                     </Text>
                   </View>
-                  <TouchableOpacity onPress={() => setModalVisible(true)}>
-                    <FontAwesomeIcon icon={faChevronDown} color="#3C84AB" />
+                  <TouchableOpacity
+                    onPress={() =>
+                      setAccountDropdownVisible(!accountDropdownVisible)
+                    }
+                  >
+                    <FontAwesomeIcon
+                      icon={faChevronDown}
+                      color="#3C84AB"
+                      size={25}
+                    />
                   </TouchableOpacity>
                 </View>
               </View>
+              {accountDropdownVisible && (
+                <View className="bg-slate-50 rounded-md border rounded border-b-0">
+                  {paymentAccounts.map((paymentAccount, index) => {
+                    return (
+                      <TouchableOpacity key={paymentAccount.id} onPress={() => handleSelectAccount(paymentAccount)}>
+                        <View
+                          className={
+                            "border-b " +
+                            (index + 1 === paymentAccounts.length && "rounded")
+                          }
+                        >
+                          <View className="ml-4 mr-12 ">
+                            <Text>
+                              Payment Account - {paymentAccount.account_number}
+                            </Text>
+                            <Text className="text-lg font-bold">
+                              Reward Points: {paymentAccount.reward_point} RWP
+                            </Text>
+                          </View>
+                        </View>
+                      </TouchableOpacity>
+                    );
+                  })}
+                </View>
+              )}
             </View>
           )}
 
