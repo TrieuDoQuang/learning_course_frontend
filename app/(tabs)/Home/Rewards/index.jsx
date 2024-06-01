@@ -27,7 +27,7 @@ const Rewards = () => {
   const [selectedPaymentAccount, setSelectedPaymentAccount] = useState();
   const [accountDropdownVisible, setAccountDropdownVisible] = useState(false);
   const { getPaymentAccounts } = PaymentAccountService();
-  const { getAllRewards, getUserRewards, redeemReward } = RewardService();
+  const { getAllRewards, getUserRewards, redeemReward, useReward } = RewardService();
   const { customerId } = useAuth();
 
   //reward details
@@ -108,6 +108,28 @@ const Rewards = () => {
         "Failed to redeem reward. Insufficient points or voucher has been redeemed using this account."
       );
       console.error("Failed to fetch rewards", error);
+    }
+  };
+
+  const requestUseReward = async () => {
+    console.log(selectedReward.id + " /// " + selectedPaymentAccount.id);
+    try {
+      const response = await useReward(
+        selectedReward.reward_id,
+        selectedPaymentAccount.id
+      );
+      //console.log(response);
+      if (response.status === 200) {
+        fetchUserRewards();
+        setIsActionSuccess(true);
+        setRewardModalMessage(response.data.message);
+      }
+    } catch (error) {
+      setIsActionSuccess(false);
+      setRewardModalMessage(
+        "Failed to use reward."
+      );
+      console.error("Failed to use rewards", error);
     }
   };
 
@@ -279,6 +301,7 @@ const Rewards = () => {
             setActionMessage={setRewardModalMessage}
             isActionSuccess={isActionSuccess}
             handleRedeem={requestRedeemReward}
+            handleUse={requestUseReward}
           />
         )}
       </ScrollView>
