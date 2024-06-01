@@ -2,7 +2,7 @@ import axios from "axios";
 
 export const ChatbotService = async (data) => {
   const url = "https://api.openai.com/v1/chat/completions";
-  const token = "sk-proj-wFZ1j7KtFuM9A4iN1yw4T3BlbkFJaZZr28lx1WT8qx1Au7hd"; // Replace with your actual token
+  const token = process.env.TOKENKEY; // Replace with your actual token
   const requestBody = {
     model: "gpt-3.5-turbo-16k",
     messages: [
