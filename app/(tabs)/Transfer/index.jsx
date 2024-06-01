@@ -26,7 +26,6 @@ import { useAuth } from "../../hooks";
 import { useData } from "../../context/DataProvider";
 import { Notification } from "../../components";
 import { useNotification } from "../../hooks";
-import { useLocalSearchParams } from "expo-router";
 
 const Transfer = () => {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -44,10 +43,6 @@ const Transfer = () => {
   const route = useRoute();
   const { setTransaction: setTransactionContext } = useData();
   const { notification, showNotification } = useNotification();
-  const defaultAccountQR = useLocalSearchParams();
-  const receiverAccountNumber = defaultAccountQR.account_number
-    ? defaultAccountQR.account_number
-    : transaction.receiver_account_number;
 
   // Set the receiver's account number from the route params
   useEffect(() => {
@@ -59,26 +54,31 @@ const Transfer = () => {
     }
   }, [route.params?.accountNumber]);
 
-
   useEffect(() => {
     const fetchReceiverName = async () => {
-      try {
-        const response = await getCustomerByAccountNumber(
-          receiverAccountNumber
-        );
+      if (transaction.receiver_account_number.length === 10) {
+        try {
+          const response = await getCustomerByAccountNumber(
+            transaction.receiver_account_number
+          );
 
-        setTransaction((prevTransaction) => ({
-          ...prevTransaction,
-          receiver_account_name: response.data.result.name,
-        }));
-        console.log(response.data.result.name);
-      } catch (error) {
-        console.error("Failed to fetch customer name:", error);
+          if(response === undefined) {
+            showNotification("Invalid account number", "error");
+            return;
+          }
+
+          setTransaction((prevTransaction) => ({
+            ...prevTransaction,
+            receiver_account_name: response.data.result.name,
+          }));
+        } catch (error) {
+          console.error("Failed to fetch customer name:", error);
+        }
       }
     };
 
     fetchReceiverName();
-  }, [receiverAccountNumber]);
+  }, [transaction.receiver_account_number]);
 
   useFocusEffect(
     useCallback(() => {
@@ -118,7 +118,7 @@ const Transfer = () => {
 
   const handleConfirmTransaction = () => {
     if (
-      receiverAccountNumber &&
+      transaction.receiver_account_number &&
       transaction.receiver_account_name &&
       transaction.amount &&
       transaction.transaction_remark
@@ -163,10 +163,19 @@ const Transfer = () => {
   };
 
   const handleInputChange = (field, value) => {
-    setTransaction((prevTransaction) => ({
-      ...prevTransaction,
-      [field]: value,
-    }));
+    if (field === "receiver_account_number") {
+      if (/^\d*$/.test(value) && value.length <= 10) {
+        setTransaction((prevTransaction) => ({
+          ...prevTransaction,
+          [field]: value,
+        }));
+      }
+    } else {
+      setTransaction((prevTransaction) => ({
+        ...prevTransaction,
+        [field]: value,
+      }));
+    }
   };
 
   return (
@@ -204,10 +213,12 @@ const Transfer = () => {
               <View className="bg-slate-50 p-[9px] rounded-md mb-10">
                 <InputItem
                   title="Account Number"
-                  value={receiverAccountNumber}
+                  value={transaction.receiver_account_number}
                   onChangeText={(value) =>
                     handleInputChange("receiver_account_number", value)
                   }
+                  maxLength={10}
+                  keyboardType="numeric"
                 />
                 <InputItem
                   title="Account Name"
