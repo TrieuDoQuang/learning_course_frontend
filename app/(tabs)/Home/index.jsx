@@ -166,19 +166,19 @@ const Home = () => {
                 image={images.avatar}
                 name="Do Quang Trieu"
                 date="14 May 2024"
-                amount="200.000"
+                amount="-150.000"
               />
               <TransactionItem
                 image={images.avatar}
-                name="Do Quang Trieu"
-                date="14 May 2024"
-                amount="200.000"
+                name="Duong Duc Khai"
+                date="30 May 2024"
+                amount="-200.000"
               />
               <TransactionItem
                 image={images.avatar}
-                name="Do Quang Trieu"
-                date="14 May 2024"
-                amount="200.000"
+                name="Que Tram"
+                date="28 May 2024"
+                amount="-300.000"
               />
             </View>
           </View>

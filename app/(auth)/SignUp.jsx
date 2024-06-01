@@ -79,7 +79,7 @@ const SignUp = () => {
         </View>
         <View className="p-5">
           <View className="bg-gradient-to-r from-blue-1 to-blue-2 h-9"></View>
-          <Text className="text-center font-bold text-[36px]">Sign up</Text>
+          <Text className="text-center font-bold text-[28px]">Sign up</Text>
           <View className="flex gap-3">
             <View>
               <Text>Your name</Text>

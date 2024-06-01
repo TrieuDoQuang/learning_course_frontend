@@ -7,68 +7,48 @@ import {
   ScrollView,
   StyleSheet,
 } from "react-native";
-import axios from "axios";
+import { ChatbotService } from "../../services/ChatboxService";
+
+// Helper function to delay execution
+const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
 const Chat = () => {
   const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState('');
-  const [errorMessage, setErrorMessage] = useState('');
+  const [input, setInput] = useState("");
 
   const sendMessage = async () => {
-    if (input.trim() === '') return;
+    if (input.trim() === "") return;
 
-    const userMessage = { sender: 'user', text: input };
-    setMessages([...messages, userMessage]);
-    setErrorMessage('');
-
-    const requestBody = {
-      model: 'gpt-3.5-turbo-16k',
-      messages: [{ role: 'user', content: input }],
-      temperature: 0.7,
-      max_tokens: 150,
-      top_p: 1,
-      frequency_penalty: 0,
-      presence_penalty: 0,
-    };
+    const userMessage = { sender: "user", text: input };
+    setMessages((prevMessages) => [...prevMessages, userMessage]);
 
     try {
-      const response = await makeRequestWithRetry(requestBody);
-      const botMessage = {
-        sender: 'bot',
-        text: response.data.choices[0].message.content.trim(),
-      };
-      setMessages([...messages, userMessage, botMessage]);
+      const botResponse = await retryRequest(() => ChatbotService(input));
+      const botMessage = { sender: "bot", text: botResponse.trim() };
+      setMessages((prevMessages) => [...prevMessages, botMessage]);
     } catch (error) {
-      console.error(error);
-      setErrorMessage('Failed to send message. Please try again later.');
+      console.error("Error sending message:", error);
+      setMessages((prevMessages) => [
+        ...prevMessages,
+        { sender: "bot", text: "Error: Could not get a response from the server." },
+      ]);
     }
 
-    setInput('');
+    setInput("");
   };
 
-  const makeRequestWithRetry = async (requestBody, retries = 3, delay = 2000) => {
-    for (let i = 0; i < retries; i++) {
+  const retryRequest = async (requestFn, retries = 3, delayMs = 1000) => {
+    for (let attempt = 0; attempt < retries; attempt++) {
       try {
-        const response = await axios.post(
-          'https://api.openai.com/v1/chat/completions',
-          requestBody,
-          {
-            headers: {
-              Authorization: `Bearer YOUR_OPENAI_API_KEY`,
-              'Content-Type': 'application/json',
-            },
-          }
-        );
-        return response;
+        return await requestFn();
       } catch (error) {
-        if (error.response && error.response.status === 429) {
-          if (i < retries - 1) {
-            await new Promise((resolve) => setTimeout(resolve, delay));
-          } else {
-            throw error;
-          }
+        if (error.response && error.response.status === 429 && attempt < retries - 1) {
+          // Rate limit exceeded, wait and retry
+          console.log(`Rate limit exceeded, retrying in ${delayMs}ms...`);
+          await delay(delayMs);
+          delayMs *= 2; // Exponential backoff
         } else {
-          throw error;
+          throw error; // Other errors or max retries reached
         }
       }
     }
@@ -80,7 +60,7 @@ const Chat = () => {
         {messages.map((message, index) => (
           <View
             key={index}
-            style={message.sender === 'user' ? styles.userMessage : styles.botMessage}
+            style={message.sender === "user" ? styles.userMessage : styles.botMessage}
           >
             <Text>{message.text}</Text>
           </View>
@@ -95,7 +75,6 @@ const Chat = () => {
         />
         <Button title="Send" onPress={sendMessage} />
       </View>
-      {errorMessage ? <Text style={styles.errorText}>{errorMessage}</Text> : null}
     </View>
   );
 };
@@ -109,35 +88,30 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   userMessage: {
-    alignSelf: 'flex-end',
-    backgroundColor: '#d1e7dd',
+    alignSelf: "flex-end",
+    backgroundColor: "#d1e7dd",
     padding: 10,
     borderRadius: 10,
     marginVertical: 5,
   },
   botMessage: {
-    alignSelf: 'flex-start',
-    backgroundColor: '#f8d7da',
+    alignSelf: "flex-start",
+    backgroundColor: "#f8d7da",
     padding: 10,
     borderRadius: 10,
     marginVertical: 5,
   },
   inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   input: {
     flex: 1,
-    borderColor: '#ccc',
+    borderColor: "#ccc",
     borderWidth: 1,
     borderRadius: 10,
     padding: 10,
     marginRight: 10,
-  },
-  errorText: {
-    color: 'red',
-    marginTop: 10,
-    textAlign: 'center',
   },
 });
 

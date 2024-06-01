@@ -6,7 +6,7 @@ import NotificationItem from "./NotificationItem";
 import BeneficiaryItem from "./BeneficiaryItem";
 import Notification from "./Notification";
 import Category from "./Category";
-import FormatCurrency, { formatCurrency } from "./FormatCurrency";
+import FormatCurrency from "./FormatCurrency";
 import InputModal from "./InputModal";
 import PaymentAccountItem from "./PaymentAccountItem";
 export {
@@ -21,5 +21,5 @@ export {
   FormatCurrency,
   InputModal,
   PaymentAccountItem,
-  formatCurrency,
+  
 };

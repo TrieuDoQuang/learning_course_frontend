@@ -27,7 +27,6 @@ import { useAuth } from "../../hooks";
 import { useData } from "../../context/DataProvider";
 import { Notification } from "../../components";
 import { useNotification } from "../../hooks";
-import { useLocalSearchParams } from "expo-router";
 
 const Transfer = () => {
   const [isModalVisible, setModalVisible] = useState(false);
@@ -83,7 +82,7 @@ const Transfer = () => {
       }
     };
     fetchReceiverName();
-  }, [receiverAccountNumber]);
+  }, [transaction.receiver_account_number]);
 
   useFocusEffect(
     useCallback(() => {
@@ -134,7 +133,7 @@ const Transfer = () => {
 
   const handleConfirmTransaction = () => {
     if (
-      receiverAccountNumber &&
+      transaction.receiver_account_number &&
       transaction.receiver_account_name &&
       transaction.amount &&
       transaction.transaction_remark
@@ -231,7 +230,7 @@ const Transfer = () => {
               <View className="bg-slate-50 p-[9px] rounded-md mb-10">
                 <InputItem
                   title="Account Number"
-                  value={receiverAccountNumber}
+                  value={transaction.receiver_account_number}
                   onChangeText={(value) =>
                     handleInputChange("receiver_account_number", value)
                   }
