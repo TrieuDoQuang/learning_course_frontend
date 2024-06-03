@@ -3,6 +3,7 @@ import { useAxiosPrivate } from "../hooks";
 const SavingAccountService = () => {
   const axiosPrivate = useAxiosPrivate();
 
+  //This function is used to get user's saving accounts by making a GET request with userid at /savingAccounts/userSavingAccount/${userId} endpoint.
   const getUserSavingAccounts = async (userId) => {
     try {
       const response = await axiosPrivate.get(
@@ -14,6 +15,7 @@ const SavingAccountService = () => {
     }
   };
 
+  //This function is used to get all interest rates by making a GET request to the /interestRates endpoint.
   const getAllInterestRates = async () => {
     try {
       const response = await axiosPrivate.get(`/interestRates`);
@@ -23,6 +25,7 @@ const SavingAccountService = () => {
     }
   };
 
+  //This function is used to insert a new saving account by making a POST request to the /savingAccounts endpoint.
   const insertSavingAccount = async (
     interestRateId,
     paymentAccountId,
@@ -42,6 +45,7 @@ const SavingAccountService = () => {
     }
   };
 
+  //This function is used to withdraw a saving account by making a PUT request to the /savingAccounts/withdraw/${savingAccountId} endpoint.
   const withdrawSavingAccount = async (savingAccountId) => {
     try {
       const response = await axiosPrivate.put(

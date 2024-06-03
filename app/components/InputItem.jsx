@@ -1,6 +1,8 @@
 import React from "react";
 import { Text, TextInput, View } from "react-native";
 
+// Author: Trieu
+// This component is used to display a single input item
 const InputItem = ({
   title,
   value,

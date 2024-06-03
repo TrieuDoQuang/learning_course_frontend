@@ -21,6 +21,9 @@ const initialChangePasswordData = {
   confirmPassword: "",
 };
 
+
+// Author: Trieu
+// This component is used to display the account screen, which allows users to change their password
 const Account = () => {
   const { customerId } = useAuth();
   const [changePasswordData, setChangePasswordData] = useState(

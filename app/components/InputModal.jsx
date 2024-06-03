@@ -4,6 +4,9 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { faClose } from "@fortawesome/free-solid-svg-icons";
 import InputItem from "./InputItem";
 
+
+// Author: Dat
+// This component is used to display a modal with input fields
 const InputModal = ({ isVisible, onClose, onSubmit, inputs }) => {
   return (
     <Modal

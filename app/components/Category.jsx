@@ -1,6 +1,8 @@
 import { View, Image, Text, TouchableOpacity } from "react-native";
 import images from "../assets";
 
+// Author: Khai
+// This component is used to display a single reward category
 const Category = ({ reward, setModalVisibility, setSelectedReward }) => {
   return (
     <TouchableOpacity

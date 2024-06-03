@@ -1,6 +1,9 @@
 import { Stack } from "expo-router";
 import images from "../../assets";
 import { ImageBackground } from "react-native";
+
+// Author: Trieu
+// This component is used to display the stack layout of the Profile module include Account, Beneficiary, Chat
 const StackLayout = () => {
   return (
     <Stack>

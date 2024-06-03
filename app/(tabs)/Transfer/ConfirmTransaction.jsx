@@ -12,6 +12,9 @@ import { useNotification } from "../../hooks";
 import { Notification } from "../../components";
 import { router } from "expo-router";
 
+
+// Author: Dat
+// This component is used to display the confirm transaction screen
 const ConfirmTransaction = () => {
   const [otp, setOtp] = useState("");
   const { transaction } = useData();

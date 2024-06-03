@@ -2,6 +2,8 @@ import { View, Text, TouchableOpacity } from "react-native";
 import { Link } from "expo-router";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 
+// Author: Dat
+// This component is used to display a single feature item
 const FeatureItem = ({ title, icon, className }) => {
   return (
     <View className={`${className} items-center`}>

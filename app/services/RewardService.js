@@ -3,6 +3,7 @@ import { useAxiosPrivate } from "../hooks";
 const RewardService = () => {
   const axiosPrivate = useAxiosPrivate();
 
+  //This function is used to get all rewards by making a GET request to the /rewards endpoint.
   const getAllRewards = async () => {
     try {
       const response = await axiosPrivate.get(
@@ -14,6 +15,7 @@ const RewardService = () => {
     }
   };
 
+  //This function is used to get user's rewards by making a GET request with userid at /rewards/userReward/${userId} endpoint.
   const getUserRewards = async (userId) => {
     try {
       const response = await axiosPrivate.get(
@@ -25,6 +27,7 @@ const RewardService = () => {
     }
   };
 
+  //This function is used to redeem a reward by making a POST request to the /rewards/userReward/redeem endpoint.
   const redeemReward = async (rewardId, paymentAccountId) => {
     try {
       const response = await axiosPrivate.post(
@@ -38,6 +41,7 @@ const RewardService = () => {
     }
   };
 
+  //This function is used to use a reward by making a PUT request to the /rewards/userReward/useReward endpoint.
   const useReward = async (rewardId, paymentAccountId) => {
     try {
       const response = await axiosPrivate.put(

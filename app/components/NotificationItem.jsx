@@ -10,6 +10,9 @@ import { useFocusEffect } from "@react-navigation/native";
 import { useAuth } from "../hooks";
 import FormatCurrency from "./FormatCurrency";
 
+
+// Author: Trieu
+// This component is used to display a single notification item
 const NotificationItem = ({
   timeString,
   fullDateTime,

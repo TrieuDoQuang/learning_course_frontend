@@ -7,6 +7,9 @@ import { useFocusEffect } from "@react-navigation/native";
 import { useAuth } from "../../hooks";
 import moment from "moment";
 
+
+//author: Dat
+//This component is used to display the notification screen
 const Notification = () => {
   const [transactions, setTransactions] = useState([]);
 

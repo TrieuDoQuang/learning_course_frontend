@@ -3,6 +3,7 @@ import { axiosPrivate } from "../api/axios";
 import { refreshToken } from "../utils/TokenUtil";
 import useAuth from "./useAuth";
 
+// This hook is used to make authenticated requests to the server
 const useAxiosPrivate = () => {
   const { token, setToken } = useAuth();
 
